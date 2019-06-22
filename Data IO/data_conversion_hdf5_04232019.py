@@ -33,11 +33,11 @@ run_info.create_dataset('Stuffing Delay (ms)',data=2.0)
 #time_ms,time_s,timeB_s,timeB_ms,Bdot1,Bdot2,Bdot3,Bdot4,B1,B2,B3,B4,B1filt,B2filt,B3filt,B4filt
 data = load.load_picoscope(1)
 shotnum = 17
-time_ms,time_s,timeB_s,timeB_ms,timeraw=data[0],data[1],data[2],data[3],data[20]
+time_us,time_s,timeB_s,timeB_us,timeraw=data[0],data[1],data[2],data[3],data[20]
 time=h5f.create_group("time")
-time.create_dataset('time_ms',data=time_ms)
+time.create_dataset('time_us',data=time_us)
 time.create_dataset('time_s',data=time_s)
-time.create_dataset('timeB_ms',data=timeB_ms)
+time.create_dataset('timeB_us',data=timeB_us)
 time.create_dataset('timeraw',data=timeraw)
 
 datalength=data[0].shape[0]
