@@ -36,7 +36,7 @@ time_range = [start_time,end_time]
 start_time_index = iff.tindex_min(start_time,timeB_us)
 end_time_index = iff.tindex_min(end_time,timeB_us)
 #select shot to analyze
-shot = 5
+shot = 10
 
 bt5 = data['pos5']['b']['theta'][5,:]
 bz5 = data['pos5']['b']['z'][5,:]
@@ -62,7 +62,7 @@ ax1=plt.subplot(1,1,1)
 #####################################  
 
 ### Plot arrow ####
-arrowtime = 80.00#in us
+arrowtime = 90.00#in us
 timestep = iff.tindex_min(arrowtime,timeB_us)
 plt.arrow(0, 0, bz5[timestep], bt5[timestep], head_width=100, head_length=100, fc='k', ec='k')
 plt.arrow(0, 0, bz5[timestep], 0, head_width=10, head_length=10, fc='blue', ec='blue',alpha=0.3)
