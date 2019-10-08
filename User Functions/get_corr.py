@@ -60,7 +60,7 @@ def get_corr_wmean(t,sig1,sig2,detrend=pylab.detrend_linear,
     #optimize lengths
     #sig1 = optlength(sig1)
     #sig2 = optlength(sig2)
-    #detrend
+    #detrend///
     #pylab.plot(sig1)
     #sig1 = detrend(sig1)
     meansig1 = numpy.mean(sig1)
