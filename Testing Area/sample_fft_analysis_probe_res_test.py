@@ -17,12 +17,12 @@ import indexfinderfuncs as iff
 # Directory style depends on Mac vs PC. For PC, use a double backslash.
 # for a Mac, use a single forward slash.
 ### PC Style ###
-data_directory_location = 'C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2019\\Correlation Campaign\\Encoding Converted for PC\\04232019\\processed\\'
+data_directory_location = 'C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2019\\Correlation Campaign\\Encoding Converted for PC\\06282019\\processed\\'
 ### Mac Style ###
 #data_director_location = '/user/dschaffner/data/'
 #######################################################################
 #place the following file in the directory indicated above
-datafilename='sample_2kV_oddpos1to13_2ms_stuffdelay_17shots_04232019.h5'
+datafilename='2kV_oddpos1to13_2ms_stuffdelay_10shots_probe_res_testing_06282019.h5'
 #load hdf5 file
 data = load_hdf5(data_directory_location+datafilename,verbose=True)
 timeB_us = data['time']['timeB_us'][:]
@@ -37,18 +37,21 @@ start_time_index = iff.tindex_min(start_time,timeB_us)
 end_time_index = iff.tindex_min(end_time,timeB_us)
 #select shots to analyze
 first_shot = 1
-last_shot = 16
+last_shot = 3
 numshots = (last_shot-first_shot)+1
 shot_range = [first_shot,last_shot]
 
 #determine FFT size and generate an output array
-fsize=int((data['pos1']['b']['z'][0,start_time_index:end_time_index].shape[0])/2)+1
-avebspec = np.zeros([fsize])
+fsize=int((data['pos9']['b']['z'][0,start_time_index:end_time_index].shape[0])/2)+1
+avebspec1 = np.zeros([fsize])
+avebspec2 = np.zeros([fsize])
 
 #loop over shots to read in data and compute FFT
 for shot in np.arange(first_shot,last_shot+1):
-    f,f0,comp1,pwr,mag1,phase1,cos_phase1,interval=spec.spectrum_wwind(data['pos1']['b']['z'][shot,start_time_index:end_time_index],timeB_s[start_time_index:end_time_index],window='hanning')
-    avebspec=avebspec+pwr
+    f,f0,comp1,pwr,mag1,phase1,cos_phase1,interval=spec.spectrum_wwind(data['pos13']['b']['z'][shot,start_time_index:end_time_index],timeB_s[start_time_index:end_time_index],window='hanning')
+    avebspec1=avebspec1+pwr
+    f,f0,comp1,pwr,mag1,phase1,cos_phase1,interval=spec.spectrum_wwind(data['pos13']['b']['theta'][shot,start_time_index:end_time_index],timeB_s[start_time_index:end_time_index],window='hanning')
+    avebspec2=avebspec2+pwr
         
 #########plot loglog FFT###############
         
@@ -71,7 +74,8 @@ ax1=plt.subplot(1,1,1)
 #####################################  
     
 #plot FFT#
-plt.loglog(f,avebspec)
+plt.loglog(f,avebspec1)
+plt.loglog(f,avebspec2)
 plt.xlabel('Frequency [Hz]')
 plt.ylabel('Power (arb)')
     

@@ -35,23 +35,14 @@ time_range = [start_time,end_time]
 #compute indices from time range
 start_time_index = iff.tindex_min(start_time,timeB_us)
 end_time_index = iff.tindex_min(end_time,timeB_us)
-#select shots to analyze
-first_shot = 1
-last_shot = 16
-numshots = (last_shot-first_shot)+1
-shot_range = [first_shot,last_shot]
+#select shot to analyze
+shot = 10
 
-#determine FFT size and generate an output array
-fsize=int((data['pos1']['b']['z'][0,start_time_index:end_time_index].shape[0])/2)+1
-avebspec = np.zeros([fsize])
+bt5 = data['pos5']['b']['theta'][5,:]
+bz5 = data['pos5']['b']['z'][5,:]
+mag5 = np.sqrt(bt5**2+bz5**2)
 
-#loop over shots to read in data and compute FFT
-for shot in np.arange(first_shot,last_shot+1):
-    f,f0,comp1,pwr,mag1,phase1,cos_phase1,interval=spec.spectrum_wwind(data['pos1']['b']['z'][shot,start_time_index:end_time_index],timeB_s[start_time_index:end_time_index],window='hanning')
-    avebspec=avebspec+pwr
-        
-#########plot loglog FFT###############
-        
+
 #Plot Details###############################
 plt.rc('axes',linewidth=1.0)
 plt.rc('xtick.major',width=1.0)
@@ -59,20 +50,31 @@ plt.rc('ytick.major',width=1.0)
 plt.rc('xtick.minor',width=1.0)
 plt.rc('ytick.minor',width=1.0)
 plt.rc('lines',markersize=2.0,markeredgewidth=0.0,linewidth=1.0)
-fig=plt.figure(num=1,figsize=(4,3),dpi=300,facecolor='w',edgecolor='k')
-left  = 0.2  # the left side of the subplots of the figure
-right = 0.97    # the right side of the subplots of the figure
-bottom = 0.2  # the bottom of the subplots of the figure
+fig=plt.figure(num=1,figsize=(4,4),dpi=200,facecolor='w',edgecolor='k')
+left  = 0.21  # the left side of the subplots of the figure
+right = 0.9    # the right side of the subplots of the figure
+bottom = 0.15  # the bottom of the subplots of the figure
 top = 0.96      # the top of the subplots of the figure
 wspace = 0.2   # the amount of width reserved for blank space between subplots
 hspace = 0.25   # the amount of height reserved for white space between subplots
 plt.subplots_adjust(left=left, bottom=bottom, right=right, top=top, wspace=wspace, hspace=hspace)
 ax1=plt.subplot(1,1,1)   
 #####################################  
-    
-#plot FFT#
-plt.loglog(f,avebspec)
-plt.xlabel('Frequency [Hz]')
-plt.ylabel('Power (arb)')
+
+### Plot arrow ####
+arrowtime = 90.00#in us
+timestep = iff.tindex_min(arrowtime,timeB_us)
+plt.arrow(0, 0, bz5[timestep], bt5[timestep], head_width=100, head_length=100, fc='k', ec='k')
+plt.arrow(0, 0, bz5[timestep], 0, head_width=10, head_length=10, fc='blue', ec='blue',alpha=0.3)
+plt.arrow(bz5[timestep], 0, 0, bt5[timestep], head_width=10, head_length=10, fc='red', ec='red',alpha=0.3)
+
+plt.xlabel(r'$B_{z}$ [G]',color='blue')
+plt.ylabel(r'$B_{\theta}$ [G]',color='red')
+plt.xlim(-3000,3000)
+plt.ylim(-3000,3000)
+timelabel=str(arrowtime)+r' $\mu$ s' 
+plt.text(-2500,-2500,timelabel)
+poslabel='Position 5'
+plt.text(-2500,2500,poslabel)
     
         
