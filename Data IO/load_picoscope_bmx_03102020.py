@@ -81,7 +81,10 @@ def load_picoscope(shot_number, maxrange = 1, scopenum = 4, time_range = [-2.0, 
     filename = '20200310-0001 ('
     
     print(location + scopename + filename + str(shot_number) + ').txt')
-    data = np.loadtxt(location + scopename + filename + str(shot_number) + ').txt', skiprows = 2, unpack = True)
+    try:
+        data = np.loadtxt(location + scopename + filename + str(shot_number) + ').txt', skiprows = 2, unpack = True)
+    except NameError as err:
+        print("Double check you have updated the location variable to your OS system; mac, pc: ", err)
     ##### return data
     dataraw = data
     
