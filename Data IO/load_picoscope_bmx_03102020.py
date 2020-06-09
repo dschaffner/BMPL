@@ -33,7 +33,7 @@ Total Shots = 25
 """
 ###################################################
 
-def load_picoscope(shot_number, maxrange = 5, scopenum = 4, time_range = [-2.0, 198.0], location = '', plot = False):
+def load_picoscope(shot_number, maxrange = 1, scopenum = 4, time_range = [-2.0, 198.0], location = '', plot = False):
     
     def butter_highpass(cutoff, fs, order = 5):
         nyq = 0.5 * fs
@@ -76,6 +76,7 @@ def load_picoscope(shot_number, maxrange = 5, scopenum = 4, time_range = [-2.0, 
     startintg_index = 0 #3000
     meancutoff = 1000
     ##### load file
+    # The location and filename lines must be updated to your system.
     location = '/Volumes/CarFlor/Research/Data/2020/03102020/'
     filename = '20200310-0001 ('
     
