@@ -1,14 +1,15 @@
 import numpy as np
 import os
 
-def loadnpzfile(filename,supress=False):
+
+def loadnpzfile(filename, supress=False):
 
     savefile = filename
     savefile = os.path.normpath(savefile)
 
     file = np.load(savefile)
     if not supress:
-        print ('Arrays loaded: ')
+        print('Arrays loaded: ')
         for arr in file.files:
-            print (arr)    
+            print(arr)
     return file

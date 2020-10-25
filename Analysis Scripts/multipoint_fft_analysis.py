@@ -1,4 +1,4 @@
-#sample_hdf5_data_loadin.py
+# sample_hdf5_data_loadin.py
 
 # -*- coding: utf-8 -*-
 """
@@ -25,13 +25,13 @@ data_directory_location = 'C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2019
 ### Mac Style ###
 #data_director_location = '/user/dschaffner/data/'
 #######################################################################
-#place the following file in the directory indicated above
-datafilename='2kV_oddpos9to21zr_2ms_stuffdelay_40_07022019.h5'
-datafilename='2kV_oddpos1to13_2ms_stuffdelay_17shots_04232019.h5'
-datafilename='2kV_oddpos9to21zr_0p5ms_stuffdelay_30shots_07052019.h5'
-datafilename='2kV_LangPort4_0p5ms_1msGas_8shots_langmuircurrent_10142019.h5'
-#load hdf5 file
-data = load_hdf5(data_directory_location+datafilename,verbose=True)
+# place the following file in the directory indicated above
+datafilename = '2kV_oddpos9to21zr_2ms_stuffdelay_40_07022019.h5'
+datafilename = '2kV_oddpos1to13_2ms_stuffdelay_17shots_04232019.h5'
+datafilename = '2kV_oddpos9to21zr_0p5ms_stuffdelay_30shots_07052019.h5'
+datafilename = '2kV_LangPort4_0p5ms_1msGas_8shots_langmuircurrent_10142019.h5'
+# load hdf5 file
+data = load_hdf5(data_directory_location+datafilename, verbose=True)
 
 """
 timeB_us = data['time']['timeB_us'][:]
