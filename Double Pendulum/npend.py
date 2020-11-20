@@ -13,11 +13,11 @@ def integrate_pendulum(n, times,
                        initial_velocities=0,
                        lengths=None, masses=1):
     """Integrate a multi-pendulum with `n` sections"""
-    #-------------------------------------------------
+    # -------------------------------------------------
     # Step 1: construct the pendulum model
-    
+
     # Generalized coordinates and velocities
-    # (in this case, angular positions & velocities of each mass) 
+    # (in this case, angular positions & velocities of each mass)
     q = mechanics.dynamicsymbols('q:{0}'.format(n))
     u = mechanics.dynamicsymbols('u:{0}'.format(n))
 
@@ -27,8 +27,8 @@ def integrate_pendulum(n, times,
 
     # gravity and time symbols
     g, t = symbols('g,t')
-    
-    #--------------------------------------------------
+
+    # --------------------------------------------------
     # Step 2: build the model using Kane's Method
 
     # Create pivot point reference frame
@@ -65,14 +65,14 @@ def integrate_pendulum(n, times,
     KM = mechanics.KanesMethod(A, q_ind=q, u_ind=u,
                                kd_eqs=kinetic_odes)
     fr, fr_star = KM.kanes_equations(forces, particles)
-    
-    #-----------------------------------------------------
+
+    # -----------------------------------------------------
     # Step 3: numerically evaluate equations and integrate
 
     # initial positions and velocities – assumed to be given in degrees
     y0 = np.deg2rad(np.concatenate([np.broadcast_to(initial_positions, n),
                                     np.broadcast_to(initial_velocities, n)]))
-        
+
     # lengths and masses
     if lengths is None:
         lengths = np.ones(n) / n
@@ -92,7 +92,7 @@ def integrate_pendulum(n, times,
     mm_sym = KM.mass_matrix_full.subs(kds).subs(unknown_dict)
     fo_sym = KM.forcing_full.subs(kds).subs(unknown_dict)
 
-    # create functions for numerical calculation 
+    # create functions for numerical calculation
     mm_func = lambdify(unknowns + parameters, mm_sym)
     fo_func = lambdify(unknowns + parameters, fo_sym)
 
@@ -117,12 +117,11 @@ def get_xy_coords(p, lengths=None):
     y = np.hstack([zeros, -lengths * np.cos(p[:, :n])])
     return np.cumsum(x, 1), np.cumsum(y, 1)
 
+
 t = np.linspace(0, 10, 1000)
 p = integrate_pendulum(n=2, times=t)
 #p = integrate_pendulum(n=3, times=t)
 #p = integrate_pendulum(n=4, times=t)
 
 x, y = get_xy_coords(p)
-plt.plot(x, y);
-
-
+plt.plot(x, y)

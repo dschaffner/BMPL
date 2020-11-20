@@ -1,4 +1,4 @@
-#load_hdf5.py
+# load_hdf5.py
 # -*- coding: utf-8 -*-
 """
 Created on Tue Jun 18 14:44:36 2019
@@ -8,10 +8,12 @@ Created on Tue Jun 18 14:44:36 2019
 
 import h5py
 
+
 def printname(name):
     print(name)
 
-def load_hdf5(file,verbose=False):
+
+def load_hdf5(file, verbose=False):
     f = h5py.File(file, 'r')
     if verbose:
         print('All Groups Contained')
