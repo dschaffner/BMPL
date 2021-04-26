@@ -2,6 +2,8 @@ xtick.labelsize: 16
 ytick.labelsize: 16
 xtick.direction: in
 ytick.direction: in
+xtick.minor.visible: True
+ytick.minor.visible: True
 font.size: 15
 figure.autolayout: True
 figure.figsize: 6.69, 8.25
