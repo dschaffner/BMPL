@@ -7,21 +7,23 @@ from sympy.physics import mechanics
 from sympy import Dummy, lambdify
 from scipy.integrate import odeint
 
-lengthvalues=1#None
+lengthvalues = 1  # None
 initial_angle = 135
 initial_velocity = 0
 massvalues = 1
 n_pends = 40
+
+
 def integrate_pendulum(n, times,
                        initial_positions=initial_angle,
                        initial_velocities=initial_velocity,
                        lengths=lengthvalues, masses=massvalues):
     """Integrate a multi-pendulum with `n` sections"""
-    #-------------------------------------------------
+    # -------------------------------------------------
     # Step 1: construct the pendulum model
-    
+
     # Generalized coordinates and velocities
-    # (in this case, angular positions & velocities of each mass) 
+    # (in this case, angular positions & velocities of each mass)
     q = mechanics.dynamicsymbols('q:{0}'.format(n))
     u = mechanics.dynamicsymbols('u:{0}'.format(n))
 
@@ -31,8 +33,8 @@ def integrate_pendulum(n, times,
 
     # gravity and time symbols
     g, t = symbols('g,t')
-    
-    #--------------------------------------------------
+
+    # --------------------------------------------------
     # Step 2: build the model using Kane's Method
 
     # Create pivot point reference frame
@@ -69,14 +71,14 @@ def integrate_pendulum(n, times,
     KM = mechanics.KanesMethod(A, q_ind=q, u_ind=u,
                                kd_eqs=kinetic_odes)
     fr, fr_star = KM.kanes_equations(forces, particles)
-    
-    #-----------------------------------------------------
+
+    # -----------------------------------------------------
     # Step 3: numerically evaluate equations and integrate
 
     # initial positions and velocities – assumed to be given in degrees
     y0 = np.deg2rad(np.concatenate([np.broadcast_to(initial_positions, n),
                                     np.broadcast_to(initial_velocities, n)]))
-        
+
     # lengths and masses
     if lengths is None:
         lengths = np.ones(n) / n
@@ -96,7 +98,7 @@ def integrate_pendulum(n, times,
     mm_sym = KM.mass_matrix_full.subs(kds).subs(unknown_dict)
     fo_sym = KM.forcing_full.subs(kds).subs(unknown_dict)
 
-    # create functions for numerical calculation 
+    # create functions for numerical calculation
     mm_func = lambdify(unknowns + parameters, mm_sym)
     fo_func = lambdify(unknowns + parameters, fo_sym)
 
@@ -121,6 +123,7 @@ def get_xy_coords(p, lengths=lengthvalues):
     y = np.hstack([zeros, -lengths * np.cos(p[:, :n])])
     return np.cumsum(x, 1), np.cumsum(y, 1)
 
+
 t = np.linspace(0, 1000, 100000)
 #p = integrate_pendulum(n=2, times=t)
 #p = integrate_pendulum(n=3, times=t)
@@ -128,19 +131,17 @@ p = integrate_pendulum(n=n_pends, times=t)
 
 x, y = get_xy_coords(p)
 #plt.plot(x, y);
-#plt.figure(2)
-#plt.plot(t,x[:,1])
-#plt.plot(t,x[:,2])
-#plt.plot(t,x[:,3])
+# plt.figure(2)
+# plt.plot(t,x[:,1])
+# plt.plot(t,x[:,2])
+# plt.plot(t,x[:,3])
 
 
 datadir = 'C:\\Users\\dschaffner\\Dropbox\\From OneDrive\\Galatic Dynamics Data\\DoublePendulum\\nPend\\'
-filename='nPen_'+str(n_pends)+'masses_LsEq1_MsEq1_g9p81_1000sec_tstep001_135degIC_0velIC.npz'
-#filename='nPen_7mass_LsTotal1_MsEq1_g9p81_1000sec_tstep001_135degIC_0velIC.npz'
-np.savez(datadir+filename,x=x,y=y,t=t,n_masses=n_pends,
-                         initial_angle=initial_angle,
-                         initial_velocity=initial_velocity,
-                         lengths=lengthvalues,masses=massvalues)
- 
-
-
+filename = 'nPen_' + \
+    str(n_pends)+'masses_LsEq1_MsEq1_g9p81_1000sec_tstep001_135degIC_0velIC.npz'
+# filename='nPen_7mass_LsTotal1_MsEq1_g9p81_1000sec_tstep001_135degIC_0velIC.npz'
+np.savez(datadir+filename, x=x, y=y, t=t, n_masses=n_pends,
+         initial_angle=initial_angle,
+         initial_velocity=initial_velocity,
+         lengths=lengthvalues, masses=massvalues)
