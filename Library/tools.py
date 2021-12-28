@@ -1,11 +1,8 @@
 import numpy as np
 import bmx as BMX
-import bmx_data as data03
-import h5py
+import dataset as data03
 import matplotlib.pylab as plt
 import spectrum_wwind as sw
-from bmx_data import load_data
-from bmx_data import load_bdot_data
 
 def get_windowed_bmag(pos, shot, window):
     """ Output the windowed bmag and time arrays of {shot} at {pos}."""
@@ -45,17 +42,6 @@ def get_bmag(pos, shot):
     br, bt, bz, time = data03.load_data(pos, shot)
     bmag = np.sqrt(br**2 + bt**2 + bz**2)
     return bmag, time
-
-
-def get_bank_voltage_current():
-    """ Outputs the discharge voltage, current and time."""
-    filename = '/Volumes/cacs_resear/Data/2020/03102020/HDF5/bankData.h5'
-    f = h5py.File(filename, 'r')
-    current = f['/data/curr'][()]
-    voltage = f['/data/volt'][()]
-    time = f['/time/time'][()]
-    f.close()
-    return current, voltage, time
 
 
 def HPF(data, filt):
