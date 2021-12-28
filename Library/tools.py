@@ -4,6 +4,8 @@ import bmx_data as data03
 import h5py
 import matplotlib.pylab as plt
 import spectrum_wwind as sw
+from bmx_data import load_data
+from bmx_data import load_bdot_data
 
 def get_windowed_bmag(pos, shot, window):
     """ Output the windowed bmag and time arrays of {shot} at {pos}."""
