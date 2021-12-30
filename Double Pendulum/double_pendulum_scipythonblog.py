@@ -1,6 +1,6 @@
-#double pendulum example code 
-#taken verbatim from the Scipython Blog
-#https://scipython.com/blog/the-double-pendulum/
+# double pendulum example code
+# taken verbatim from the Scipython Blog
+# https://scipython.com/blog/the-double-pendulum/
 
 import sys
 import numpy as np
@@ -14,6 +14,7 @@ m1, m2 = 1, 1
 # The gravitational acceleration (m.s-2).
 g = 9.81
 
+
 def deriv(y, t, L1, L2, m1, m2):
     """Return the first derivatives of y = theta1, z1, theta2, z2."""
     theta1, z1, theta2, z2 = y
@@ -24,9 +25,10 @@ def deriv(y, t, L1, L2, m1, m2):
     z1dot = (m2*g*np.sin(theta2)*c - m2*s*(L1*z1**2*c + L2*z2**2) -
              (m1+m2)*g*np.sin(theta1)) / L1 / (m1 + m2*s**2)
     theta2dot = z2
-    z2dot = ((m1+m2)*(L1*z1**2*s - g*np.sin(theta2) + g*np.sin(theta1)*c) + 
+    z2dot = ((m1+m2)*(L1*z1**2*s - g*np.sin(theta2) + g*np.sin(theta1)*c) +
              m2*L2*z2**2*s*c) / L2 / (m1 + m2*s**2)
     return theta1dot, z1dot, theta2dot, z2dot
+
 
 def calc_E(y):
     """Return the total energy of the system."""
@@ -34,8 +36,9 @@ def calc_E(y):
     th1, th1d, th2, th2d = y.T
     V = -(m1+m2)*L1*g*np.cos(th1) - m2*L2*g*np.cos(th2)
     T = 0.5*m1*(L1*th1d)**2 + 0.5*m2*((L1*th1d)**2 + (L2*th2d)**2 +
-            2*L1*L2*th1d*th2d*np.cos(th1-th2))
+                                      2*L1*L2*th1d*th2d*np.cos(th1-th2))
     return T + V
+
 
 # Maximum time, time point spacings and the time grid (all in s).
 tmax, dt = 30, 0.01
@@ -54,7 +57,7 @@ if np.max(np.sum(np.abs(calc_E(y) - E))) > EDRIFT:
     sys.exit('Maximum energy drift of {} exceeded.'.format(EDRIFT))
 
 # Unpack z and theta as a function of time
-theta1, theta2 = y[:,0], y[:,2]
+theta1, theta2 = y[:, 0], y[:, 2]
 
 # Convert to Cartesian coordinates of the two bob positions.
 x1 = L1 * np.sin(theta1)
@@ -68,6 +71,7 @@ r = 0.05
 trail_secs = 1
 # This corresponds to max_trail time points.
 max_trail = int(trail_secs / dt)
+
 
 def make_plot(i):
     # Plot and save an image of the double pendulum configuration for time
