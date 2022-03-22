@@ -30,6 +30,12 @@ def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
         return y
 
 
+import smooth as sm
+def iter_smooth(array,loops=6,window_len=3):
+    for l in np.arange(loops):
+        array = sm.smooth(array,window_len=window_len)
+    return array
+
 # Sample rate and desired cutoff frequencies (in Hz).
 fs = 125e6
 lowcut = 50e3
@@ -43,6 +49,7 @@ data=load_hdf5(directory+datafilename,verbose=True)
 time_s = data['time']['time_s']
 timeB_s = time_s[1:]
 time_us = data['time']['time_us']
+time_us = np.array(time_us)
 timeB_us = time_us[1:]
 analysis_start_time = 20
 analysis_end_time = 40
@@ -57,8 +64,8 @@ num_pairs = 3
 directions = 3
 tde_pairs=[['probe5','probe7'],['probe19','probe21'],['probe33','probe35']]
 
-delaytimes = np.zeros([num_pairs, directions, numshots])
-delayindex = np.zeros([num_pairs, directions, numshots])
+delaytimes = np.zeros([num_pairs, numshots])
+delayindex = np.zeros([num_pairs, numshots])
 
 plotshots=1
 plt.rc('axes',linewidth=0.75)
@@ -80,59 +87,97 @@ plt.subplots_adjust(left=left, bottom=bottom, right=right, top=top, wspace=wspac
 #ax=plt.axes([left,bottom,right-left,top-bottom])
 ax=plt.subplot(1,1,1)
 
+# Function to print mouse click event coordinates
+def onclick(event):
+    if event.key=='shift':
+        print('Time is', event.xdata)
 
-
-for shot in np.arange(numshots):
+for shot in np.arange(67,numshots):
     tde_pair_index=0
     for tde_pair in tde_pairs:
-        direction_index=0
-        for direction in direction_list:
-            data1=data['mag_probe']['positions'][tde_pair[0]][direction]['b'][shot,:]
-            data1_max=np.max(np.abs(data1))
-            data1_norm=data1/data1_max
-            
-            data2=data['mag_probe']['positions'][tde_pair[1]][direction]['b'][shot,:]
-            data2_max=np.max(np.abs(data2))
-            data2_norm=data2/data2_max
-            
-            data1_filt=butter_bandpass_filter(data1_norm,lowcut,highcut,fs,order=9)
-            data2_filt=butter_bandpass_filter(data2_norm,lowcut,highcut,fs,order=9)
-            
-            #use filtered
-            d1=data1_filt[start_time_index:end_time_index]
-            d2=data2_filt[start_time_index:end_time_index]
-            if plotshots:
-                plt.plot(timeB_us,data1_filt)
-                plt.plot(timeB_us,data2_filt)
-                plt.title(tde_pair[0]+tde_pair[1]+' Shot '+str(shot)+' '+direction)
-                savedirectory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\01122022\\QuickPlots\\timeseries\\probepairs\\'+tde_pair[0]+tde_pair[1]+'\\'+direction+'\\'
-                savefilename=tde_pair[0]+tde_pair[1]+'_shot_'+str(shot+1).zfill(2)+direction+'.png'
-                savefile = savedirectory+savefilename
-                plt.savefig(savefile,dpi=300,facecolor='w',edgecolor='k')
-                plt.clf()
-            #use unfiltered
-            #d1=data1_norm[start_time_index:end_time_index]
-            #d2=data2_norm[start_time_index:end_time_index]
 
-            t=timeB_s[start_time_index:end_time_index]
-            dt=timeB_s[1]-timeB_s[0]
-            tau,corr=gc.get_corr(t,d2,d1,normalized=False)
-            
-            index_at_zero_time=iff.tindex_min(0,tau)
-            indexsize_of_timerange_limit = int(np.round(timerange_limit/dt))
-    
-            #find time (in seconds) of max in correlation function within timerange limit
-            delayindex[tde_pair_index,direction_index,shot]=np.argmax(np.abs(corr[index_at_zero_time-indexsize_of_timerange_limit:index_at_zero_time+indexsize_of_timerange_limit]))
-            delay=tau[index_at_zero_time-indexsize_of_timerange_limit+np.argmax(np.abs(corr[index_at_zero_time-indexsize_of_timerange_limit:index_at_zero_time+indexsize_of_timerange_limit]))]
-            delaytimes[tde_pair_index,direction_index,shot]=delay
-            direction_index+=1
-        tde_pair_index+=1
-            
-velocities = (port_sep/delaytimes)/1000.0#km/s
-mean_velocities = np.mean(velocities,axis=1)
+        analysis_start_time = 60
+        analysis_end_time = 160
+        start_time_index = iff.tindex_min(analysis_start_time,time_us)
+        end_time_index = iff.tindex_min(analysis_end_time,time_us)
 
-np.savez(directory+'mean_vels_01122022_60t160_50to500kHzfilt',mean_velocities=mean_velocities)
+        
+        data1r=data['mag_probe']['positions'][tde_pair[0]]['r']['bdot'][shot,:]
+        data1t=data['mag_probe']['positions'][tde_pair[0]]['t']['bdot'][shot,:]
+        data1z=data['mag_probe']['positions'][tde_pair[0]]['z']['bdot'][shot,:]
+        data1mod=np.sqrt(data1r**2+data1t**2+data1z**2)
+        data1mod_max=np.max(data1mod[start_time_index:end_time_index])
+        data1mod_norm=data1mod/data1mod_max
+        data1mod_norm=iter_smooth(data1mod_norm,loops=3,window_len=11)
+        
+        data2r=data['mag_probe']['positions'][tde_pair[1]]['r']['bdot'][shot,:]
+        data2t=data['mag_probe']['positions'][tde_pair[1]]['t']['bdot'][shot,:]
+        data2z=data['mag_probe']['positions'][tde_pair[1]]['z']['bdot'][shot,:]
+        data2mod=np.sqrt(data2r**2+data2t**2+data2z**2)
+        data2mod_max=np.max(data2mod[start_time_index:end_time_index])
+        data2mod_norm=data2mod/data2mod_max
+        data2mod_norm=iter_smooth(data2mod_norm,loops=3,window_len=11)
 
+        #data1mod_filt=butter_bandpass_filter(data1mod_norm,lowcut,highcut,fs,order=9)
+        #data2mod_filt=butter_bandpass_filter(data2mod_norm,lowcut,highcut,fs,order=9)
+        
+        #correlation
+        t=time_us[start_time_index:end_time_index]
+        d1=data1mod_norm[start_time_index:end_time_index]
+        d2=data2mod_norm[start_time_index:end_time_index]
+        tau,corr=gc.get_corr(t,d2,d1,normalized=False)
+        
+        
+        #use filtered
+        #d1=data1_filt[start_time_index:end_time_index]
+        #d2=data2_filt[start_time_index:end_time_index]
+        if plotshots:
+            
+            plt.plot(np.array(time_us),data1mod_norm)
+            plt.plot(np.array(time_us),data2mod_norm)
+            plt.title(tde_pair[0]+tde_pair[1]+' Shot '+str(shot))
+            plt.xlim(0.0,40.0)
+            plt.ylim(0,0.3)
+            
+            # Bind the button_press_event with the onclick() method
+            fig.canvas.mpl_connect('button_press_event', onclick)
+            plt.show()    
+            plt.ginput(10,timeout=0)
+            plt.clf()
+            
+            plt.plot(tau,corr)
+            plt.title(tde_pair[0]+tde_pair[1]+' Shot '+str(shot))
+            fig.canvas.mpl_connect('button_press_event', onclick)
+            plt.show()    
+            plt.ginput(20,timeout=0)
+            plt.clf()
+            #savedirectory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\01122022\\QuickPlots\\timeseries\\probepairs\\'+tde_pair[0]+tde_pair[1]+'\\mod\\'
+            #savefilename=tde_pair[0]+tde_pair[1]+'_shot_'+str(shot+1).zfill(2)+'mod.png'
+            #savefile = savedirectory+savefilename
+            #plt.savefig(savefile,dpi=300,facecolor='w',edgecolor='k')
+            #plt.clf()
+        #use unfiltered
+        #d1=data1_norm[start_time_index:end_time_index]
+        #d2=data2_norm[start_time_index:end_time_index]
+
+        #t=timeB_s[start_time_index:end_time_index]
+        #dt=timeB_s[1]-timeB_s[0]
+        #tau,corr=gc.get_corr(t,data2mod_norm,data1mod_norm,normalized=False)
+        
+        #index_at_zero_time=iff.tindex_min(0,tau)
+        #indexsize_of_timerange_limit = int(np.round(timerange_limit/dt))
+
+        #find time (in seconds) of max in correlation function within timerange limit
+        #delayindex[tde_pair_index,shot]=np.argmax(np.abs(corr[index_at_zero_time-indexsize_of_timerange_limit:index_at_zero_time+indexsize_of_timerange_limit]))
+        #delay=tau[index_at_zero_time-indexsize_of_timerange_limit+np.argmax(np.abs(corr[index_at_zero_time-indexsize_of_timerange_limit:index_at_zero_time+indexsize_of_timerange_limit]))]
+        #delaytimes[tde_pair_index,shot]=delay
+    tde_pair_index+=1
+            
+#velocities = (port_sep/delaytimes)/1000.0#km/s
+#mean_velocities = np.mean(velocities,axis=1)
+
+#np.savez(directory+'mean_vels_01122022_60t160_50to500kHzfilt',mean_velocities=mean_velocities)
+"""
 plt.figure(57)
 plt.plot(velocities[0,0,:],'o')
 plt.plot(velocities[0,1,:],'o')
@@ -276,7 +321,7 @@ plt.ylabel('Count',fontsize=16)
 #plt.plot(tau57r,corr57r)
 #plt.plot(tau57t,corr57t)
 #plt.plot(tau57z,corr57z)
-
+"""
 
 """
 plt.rc('axes',linewidth=0.75)

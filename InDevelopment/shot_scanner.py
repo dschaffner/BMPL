@@ -9,7 +9,7 @@ import matplotlib.pylab as plt
 import numpy as np
 import os
 
-directory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\01122022\\'
+directory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\03172022\\'
 #shots that should be skipped
 #43, 71, 72, 73, 76, 80, 82, 87
 #89, 90, 91, 92, 93, 94, 100
@@ -35,12 +35,12 @@ hspace = 0.05   # the amount of height reserved for white space between subplots
 plt.subplots_adjust(left=left, bottom=bottom, right=right, top=top, wspace=wspace, hspace=hspace)
 ax=plt.axes([left,bottom,right-left,top-bottom])
 
-for shot in np.arange(111,112):
-    pico1=spio.loadmat(directory+'Pico1\\20220112-0001 ('+str(shot)+').mat')
-    pico2=spio.loadmat(directory+'Pico2\\20220112-0001 ('+str(shot)+').mat')
-    pico3=spio.loadmat(directory+'Pico3\\20220112-0001 ('+str(shot)+').mat')
-    pico4=spio.loadmat(directory+'Pico4\\20220112-0001 ('+str(shot)+').mat')
-    pico5=spio.loadmat(directory+'Pico5\\20220112-0001 ('+str(shot)+').mat')
+for shot in np.arange(65,66):
+    pico1=spio.loadmat(directory+'Pico1\\20220317-0001 ('+str(shot)+').mat')
+    pico2=spio.loadmat(directory+'Pico2\\20220317-0001 ('+str(shot)+').mat')
+    pico3=spio.loadmat(directory+'Pico3\\20220317-0001 ('+str(shot)+').mat')
+    pico4=spio.loadmat(directory+'Pico4\\20220317-0001 ('+str(shot)+').mat')
+    pico5=spio.loadmat(directory+'Pico5\\20220317-0001 ('+str(shot)+').mat')
     
     ax=plt.subplot(3,2,1)
     plt.plot(pico1['A'])
@@ -75,6 +75,7 @@ for shot in np.arange(111,112):
     save_dir = 'C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\01122022\\QuickPlots\\'
     filename = 'Shot'+str(shot)+'.png'
     savefile = os.path.normpath(save_dir+filename)
-    plt.savefig(savefile,dpi=300,facecolor='w',edgecolor='k')
-    plt.clf()
+    #plt.savefig(savefile,dpi=300,facecolor='w',edgecolor='k')
+    #plt.clf()
+    
     

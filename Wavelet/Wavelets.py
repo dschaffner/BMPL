@@ -103,18 +103,21 @@ class Cwt:
         self.scale=largestscale
         self._setscales(ndata,largestscale,notes,scaling)
         self.cwt= NP.zeros((self.nscale,ndata), NP.complex64)
-        omega= NP.array(range(0,ndata/2)+range(-ndata/2,0))*(2.0*NP.pi/ndata)
+        #omega= NP.array(NP.arange(0,ndata//2)+NP.arange(-ndata//2,0))*(2.0*NP.pi//ndata)
+        omega= NP.array(list(range(0,ndata//2))+list(range(-ndata//2,0)))*(2.0*NP.pi/ndata)
         datahat=NP.fft.fft(data)
         self.fftdata=datahat
         #self.psihat0=self.wf(omega*self.scales[3*self.nscale/4])
         # loop over scales and compute wvelet coeffiecients at each scale
         # using the fft to do the convolution
-        for scaleindex in range(self.nscale):
+        for scaleindex in NP.arange(self.nscale):
             currentscale=self.scales[scaleindex]
             self.currentscale=currentscale  # for internal use
             s_omega = omega*currentscale
             psihat=self.wf(s_omega)
             psihat = psihat *  NP.sqrt(2.0*NP.pi*currentscale)
+            #print('psihat shape is ',psihat.shape)
+            #print('datahat shape is ',datahat.shape)
             convhat = psihat * datahat
             W    = NP.fft.ifft(convhat)
             self.cwt[scaleindex,0:ndata] = W 
@@ -132,13 +135,13 @@ class Cwt:
             noctave=self._log2( ndata/largestscale/2 )
             self.nscale=notes*noctave
             self.scales=NP.zeros(self.nscale,float)
-            for j in range(self.nscale):
+            for j in NP.arange(self.nscale):
                 self.scales[j] = ndata/(self.scale*(2.0**(float(self.nscale-1-j)/notes)))
         elif scaling=="linear":
             nmax=ndata/largestscale/2
             self.scales=NP.arange(float(2),float(nmax))
             self.nscale=len(self.scales)
-        else: raise ValueError, "scaling must be linear or log"
+        else: raise ValueError( "scaling must be linear or log")
         return
     
     def getdata(self):
@@ -174,7 +177,7 @@ class Morlet(Cwt):
     def wf(self, s_omega):
         H= NP.ones(len(s_omega))
         n=len(s_omega)
-        for i in range(len(s_omega)):
+        for i in NP.arange(len(s_omega)):
             if s_omega[i] < 0.0: H[i]=0.0
         # !!!! note : was s_omega/8 before 17/6/03
         xhat=0.75112554*( NP.exp(-(s_omega-self._omega0)**2/2.0))*H
@@ -189,7 +192,7 @@ class MorletReal(Cwt):
     def wf(self, s_omega):
         H= NP.ones(len(s_omega))
         n=len(s_omega)
-        for i in range(len(s_omega)):
+        for i in NP.arange(len(s_omega)):
             if s_omega[i] < 0.0: H[i]=0.0
         # !!!! note : was s_omega/8 before 17/6/03
         xhat=0.75112554*( NP.exp(-(s_omega-self._omega0)**2/2.0)+ NP.exp(-(s_omega+self._omega0)**2/2.0)- NP.exp(-(self._omega0)**2/2.0)+ NP.exp(-(self._omega0)**2/2.0))
@@ -228,7 +231,7 @@ class Paul(Cwt):
         m=self.order
         n=len(s_omega)
         normfactor=float(m)
-        for i in range(1,2*m):
+        for i in NP.arange(1,2*m):
             normfactor=normfactor*i
         normfactor=2.0**m/ NP.sqrt(normfactor)
         xhat= NP.zeros(n)
@@ -280,7 +283,7 @@ class DOG(Cwt):
         try:
             from scipy.special import gamma
         except ImportError:
-            print "Requires scipy gamma function"
+            print ("Requires scipy gamma function")
             raise ImportError
         Cwt.fourierwl=2* NP.pi/ NP.sqrt(self.order+0.5)
         m=self.order

@@ -65,15 +65,15 @@ def plot_wavelet(array,shotdata,Bpwr,Bscalespec,wvfreq,Bfft,fftfreq,time,timeran
     #create 2D image
 
     if not pwr_lims:
-        print 'Min max range'
+        print ('Min max range')
         vmin=logplotcwt.min()
         vmax=logplotcwt.max()
-        print vmin
-        print vmax
+        print (vmin)
+        print (vmax)
         im=plt.imshow(logplotcwt,extent=[time[0],time[-1],wvfreq[0],wvfreq[-1]],
         vmin=vmin,vmax=vmax,aspect='auto')
     if pwr_lims:
-        print 'user range'
+        print ('user range')
         im=plt.imshow(logplotcwt,extent=[time[0],time[-1],wvfreq[0],wvfreq[-1]],
         vmin=pwr_lims[0],vmax=pwr_lims[1],aspect='auto')
     
@@ -153,15 +153,15 @@ def wv_quickplot(Bpwr,time,wvfreq,timerange=[0.0,100.0],pwr_lims=[-40,-10],min_f
     #create 2D image
 
     if not pwr_lims:
-        print 'Min max range'
+        print ('Min max range')
         vmin=logplotcwt.min()
         vmax=logplotcwt.max()
-        print vmin
-        print vmax
+        print (vmin)
+        print (vmax)
         im=plt.imshow(logplotcwt,extent=[time[0],time[-1],wvfreq[0],wvfreq[-1]],
         vmin=vmin,vmax=vmax,aspect='auto')
     if pwr_lims:
-        print 'user range'
+        print ('user range')
         im=plt.imshow(logplotcwt,extent=[time[0],time[-1],wvfreq[0],wvfreq[-1]],
         vmin=pwr_lims[0],vmax=pwr_lims[1],aspect='auto')
     
