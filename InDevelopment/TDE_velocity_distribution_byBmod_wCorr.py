@@ -92,7 +92,7 @@ def onclick(event):
     if event.key=='shift':
         print('Time is', event.xdata)
 
-for shot in np.arange(67,numshots):
+for shot in np.arange(0,numshots):
     tde_pair_index=0
     for tde_pair in tde_pairs:
 
@@ -102,27 +102,27 @@ for shot in np.arange(67,numshots):
         end_time_index = iff.tindex_min(analysis_end_time,time_us)
 
         
-        data1r=data['mag_probe']['positions'][tde_pair[0]]['r']['bdot'][shot,:]
-        data1t=data['mag_probe']['positions'][tde_pair[0]]['t']['bdot'][shot,:]
-        data1z=data['mag_probe']['positions'][tde_pair[0]]['z']['bdot'][shot,:]
+        data1r=data['mag_probe']['positions'][tde_pair[0]]['r']['b'][shot,:]
+        data1t=data['mag_probe']['positions'][tde_pair[0]]['t']['b'][shot,:]
+        data1z=data['mag_probe']['positions'][tde_pair[0]]['z']['b'][shot,:]
         data1mod=np.sqrt(data1r**2+data1t**2+data1z**2)
         data1mod_max=np.max(data1mod[start_time_index:end_time_index])
         data1mod_norm=data1mod/data1mod_max
-        data1mod_norm=iter_smooth(data1mod_norm,loops=3,window_len=11)
+        #data1mod_norm=iter_smooth(data1mod_norm,loops=3,window_len=11)
         
-        data2r=data['mag_probe']['positions'][tde_pair[1]]['r']['bdot'][shot,:]
-        data2t=data['mag_probe']['positions'][tde_pair[1]]['t']['bdot'][shot,:]
-        data2z=data['mag_probe']['positions'][tde_pair[1]]['z']['bdot'][shot,:]
+        data2r=data['mag_probe']['positions'][tde_pair[1]]['r']['b'][shot,:]
+        data2t=data['mag_probe']['positions'][tde_pair[1]]['t']['b'][shot,:]
+        data2z=data['mag_probe']['positions'][tde_pair[1]]['z']['b'][shot,:]
         data2mod=np.sqrt(data2r**2+data2t**2+data2z**2)
         data2mod_max=np.max(data2mod[start_time_index:end_time_index])
         data2mod_norm=data2mod/data2mod_max
-        data2mod_norm=iter_smooth(data2mod_norm,loops=3,window_len=11)
+        #data2mod_norm=iter_smooth(data2mod_norm,loops=3,window_len=11)
 
         #data1mod_filt=butter_bandpass_filter(data1mod_norm,lowcut,highcut,fs,order=9)
         #data2mod_filt=butter_bandpass_filter(data2mod_norm,lowcut,highcut,fs,order=9)
         
         #correlation
-        t=time_us[start_time_index:end_time_index]
+        t=timeB_us[start_time_index:end_time_index]
         d1=data1mod_norm[start_time_index:end_time_index]
         d2=data2mod_norm[start_time_index:end_time_index]
         tau,corr=gc.get_corr(t,d2,d1,normalized=False)
@@ -133,8 +133,8 @@ for shot in np.arange(67,numshots):
         #d2=data2_filt[start_time_index:end_time_index]
         if plotshots:
             
-            plt.plot(np.array(time_us),data1mod_norm)
-            plt.plot(np.array(time_us),data2mod_norm)
+            plt.plot(np.array(timeB_us),data1mod_norm)
+            plt.plot(np.array(timeB_us),data2mod_norm)
             plt.title(tde_pair[0]+tde_pair[1]+' Shot '+str(shot))
             plt.xlim(0.0,40.0)
             plt.ylim(0,0.3)

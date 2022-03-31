@@ -22,7 +22,7 @@ def loadnpzfile(filename, supress=False):
     return file
 
 directory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\01122022\\'
-processed_wavelet = loadnpzfile(directory+'all_processed_wavlet_spectra.npz')
+processed_wavelet = loadnpzfile(directory+'all_processed_wavlet_spectra_corrvel.npz')
 mean_power_interp_60t160 = processed_wavelet['mean_power_interp_60t160']
 mean_power_interp_50t150 = processed_wavelet['mean_power_interp_50t150']
 mean_power_interp_50t125 = processed_wavelet['mean_power_interp_50t125']
@@ -118,7 +118,8 @@ plt.xlabel(r'$\left(\frac{k_{v}}{2\pi}\right)$ [m$^{-1}$]',fontsize=labelfontsiz
 plt.ylabel(r'$Arb. Power$',fontsize=labelfontsize)
 plt.legend(loc='lower left',fontsize=legendfontsize,frameon=False,handlelength=5)
 
-plt.savefig(savedirectory+'freq_and_wavenum_spectra_60t160_pos5-19-33_trace.png',dpi=600,facecolor='white',edgecolor='black')
+#plt.savefig(savedirectory+'freq_and_wavenum_spectra_60t160_pos5-19-33_trace_initialplume_v.png',dpi=600,facecolor='white',edgecolor='black')
+plt.savefig(savedirectory+'freq_and_wavenum_spectra_60t160_pos5-19-33_trace_corr_v.png',dpi=600,facecolor='white',edgecolor='black')
 plt.clf()
 plt.close()
 

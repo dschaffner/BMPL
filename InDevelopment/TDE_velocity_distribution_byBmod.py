@@ -91,7 +91,7 @@ def onclick(event):
     if event.key=='shift':
         print('Time is', event.xdata)
 
-for shot in np.arange(77,numshots):
+for shot in np.arange(0,numshots):
     tde_pair_index=0
     for tde_pair in tde_pairs:
 

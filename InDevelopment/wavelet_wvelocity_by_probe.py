@@ -61,7 +61,7 @@ bwavefreq = wvfreq['bwavefreq']
 #load velocities
 sheetdirectory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\01122022\\'
 spreadsheetfile = 'Separation Times by Shot.xlsx'
-sheet = pd.read_excel(sheetdirectory+spreadsheetfile,header=1)
+sheet = pd.read_excel(sheetdirectory+spreadsheetfile,sheet_name='Bdot Mod Corr 60t160',header=1)
 vels57 = np.array(sheet['57v'])*1000.0#m/s
 vels1921 = np.array(sheet['1921v'])*1000.0#m/s
 vels3335 = np.array(sheet['3335v'])*1000.0#m/s
@@ -194,7 +194,7 @@ mean_power_interp_60t140_trace = np.mean(mean_power_interp_60t140,axis=1)
 mean_Bwv60t140 = np.mean(Bwv60t140,axis=0)
 mean_Bwv60t140_trace = np.mean(mean_Bwv60t140,axis=1)   
             
-np.savez(directory+'all_processed_wavlet_spectra.pnz',
+np.savez(directory+'all_processed_wavlet_spectra_corrvel.npz',
          #power_interp_50t150=power_interp_50t150,
          #power_interp_50t125=power_interp_50t125,
          #power_interp_50t100=power_interp_50t100,
