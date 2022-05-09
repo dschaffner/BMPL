@@ -58,6 +58,33 @@ mean_Bwv60t140_trace = processed_wavelet['mean_Bwv60t140_trace']
 wavenum = processed_wavelet['wavenum']
 freq = processed_wavelet['freq']
 
+
+#bdot calibration
+caldirectory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\01122022\\bdotcalibration\\'
+bdotcalibration=loadnpzfile(caldirectory+'bdot_calibration_array_04042022.npz')
+bcal=bdotcalibration['bdotcal']
+bcalfreqs=bdotcalibration['freqs']
+
+#flip freq
+flipfreq = np.flip(freq)
+#calibration region
+slicefreqs = flipfreq[982:2628]
+#interpolate calibration array using slicefreqs as new array
+from scipy.interpolate import interp1d
+f=interp1d(np.log10(bcalfreqs),np.log10(bcal))
+cal = f(np.log10(slicefreqs))
+interp_cal = np.power(10.0,cal)
+plt.figure(222)
+plt.semilogx(slicefreqs,interp_cal)
+#make full frequency array
+full_interp_cal=np.zeros([len(freq)])
+full_interp_cal[982:2628]=interp_cal
+full_interp_cal[:982]=1.0
+full_interp_cal[2628:]=interp_cal[-1]
+#flip bdot spectra
+mean_Bwv60t160_flip=np.flip(mean_Bwv60t160)
+mean_Bwv60t160_cal = mean_Bwv60t160_flip*full_interp_cal
+
 savedirectory = directory+'paperPlots\\'
 
 plt.rc('axes',linewidth=2.0)

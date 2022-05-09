@@ -36,25 +36,27 @@ def iter_smooth(array,loops=6,window_len=3):
         array = sm.smooth(array,window_len=window_len)
     return array
 
-# Function to print mouse click event coordinates
-def onclick(event):
-    if event.key=='shift':
-        print('Time is', event.xdata)
+def cross_spectrum(array1,array2,interval):
+    n = array1.shape[0]
+    print ('n = ',n)
+    factor = 2.0/(interval)
+    cross_spec = np.conj(array1)*(array2)*factor
+    cross_phase = np.angle(cross_spec)
+    arr1_autospec = np.conj(array1)*(array1)*factor
+    arr1_autospec = np.real(arr1_autospec)
+    arr2_autospec = np.conj(array2)*(array2)*factor
+    arr2_autospec = np.real(arr2_autospec)
+    cross_coh = ((np.abs(cross_spec))**2)/(arr1_autospec*arr2_autospec)
 
+    return cross_spec,cross_phase,arr1_autospec,arr2_autospec,cross_coh
 
 # Sample rate and desired cutoff frequencies (in Hz).
 fs = 125e6
 lowcut = 50e3
 highcut = 2e6
-#
-#directory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\01122022\\'
-#datafilename='Dataset_01122022.h5'
-#directory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\03172022\\'
-#datafilename='Dataset_03172022_outer_inner.h5'
-#directory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\03172022\\'
-#datafilename='Dataset_03172022_inneronly.h5'
-directory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\03172022\\'
-datafilename='Dataset_03172022_halfouter_inner.h5'
+
+directory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\01122022\\'
+datafilename='Dataset_01122022.h5'
 data=load_hdf5(directory+datafilename,verbose=True)
 
 
@@ -68,100 +70,56 @@ start_time_index = iff.tindex_min(analysis_start_time,timeB_us)
 end_time_index = iff.tindex_min(analysis_end_time,timeB_us)
 timerange_limit = 3e-6#s
 port_sep = 0.0254#m
+dt=timeB_s[1]-timeB_s[0]
 
-#determine number of shots
-arr=data['mag_probe']['positions']['probe5']['r']['bdot']
-numshots=int(arr.shape[0])
+numshots=94
 direction_list=['r','t','z']
-probelist=['probe5','probe7','probe19','probe21','probe33','probe35']
+probepair=[['probe5','probe7']]#,'probe19','probe21','probe33','probe35']
 directions = len(direction_list)
-numprobes = len(probelist)
+numprobes = 1#len(probelist)
 
 #determine FFT size and generate an output array
-fsize=int((data['mag_probe']['positions']['probe5']['r']['bdot'][0,start_time_index:end_time_index].shape[0])/2)+1
-avebspec_frombdot = np.zeros([numprobes,directions,fsize])
-avebspec_direct = np.zeros([numprobes,directions,fsize])
+fsize=int((data['mag_probe']['positions']['probe5']['r']['bdot'][0,start_time_index:end_time_index].shape[0]))#/2)+1
+#avebspec_frombdot = np.zeros([numprobes,directions,fsize])
+#avebspec_direct = np.zeros([numprobes,directions,fsize])
 #avebmagspec = np.zeros([numprobes,fsize])
-spec_frombdot = np.zeros([numshots,numprobes,directions,fsize])
-spec_frombdot_sm = np.zeros([numshots,numprobes,directions,fsize])
+spec1 = np.zeros([numshots,numprobes,directions,fsize])
+spec2 = np.zeros([numshots,numprobes,directions,fsize])
+crossphase_fromb = np.zeros([numshots,numprobes,directions,fsize])
+kfrom_crossphase = np.zeros([numshots,numprobes,directions,fsize])
 
-
-plt.rc('axes',linewidth=0.75)
-plt.rc('xtick.major',width=0.75)
-plt.rc('ytick.major',width=0.75)
-plt.rc('xtick.minor',width=0.75)
-plt.rc('ytick.minor',width=0.75)
-plt.rc('lines',markersize=2.5,markeredgewidth=0.0)
-
-fig=plt.figure(num=1,figsize=(6,3),dpi=300,facecolor='w',edgecolor='k')
-
-left  = 0.15  # the left side of the subplots of the figure
-right = 0.97    # the right side of the subplots of the figure
-bottom = 0.1   # the bottom of the subplots of the figure
-top = 0.90      # the top of the subplots of the figure
-wspace = 0.2   # the amount of width reserved for blank space between subplots
-hspace = 0.05   # the amount of height reserved for white space between subplots
-plt.subplots_adjust(left=left, bottom=bottom, right=right, top=top, wspace=wspace, hspace=hspace)
-#ax=plt.axes([left,bottom,right-left,top-bottom])
-ax=plt.subplot(1,1,1)
 #loop over shots to read in data and compute FFT
 for shot in np.arange(numshots):
-    for probe_index, probe in enumerate(probelist):
-        #for direction_index, direction in enumerate(direction_list):
-        #continue 
-        data1=data['mag_probe']['positions'][probe]['r']['b'][shot,:]
-        data2=data['mag_probe']['positions'][probe]['t']['b'][shot,:]
-        data3=data['mag_probe']['positions'][probe]['z']['b'][shot,:]
-        plt.plot(timeB_us,data1)
-        plt.plot(timeB_us,data2)
-        plt.plot(timeB_us,data3)
-        plt.ylim(-7000,7000)
-        plt.title(probe+' Shot '+str(shot+1))
+    for direction_index, direction in enumerate(direction_list):
+        data1=data['mag_probe']['positions']['probe19'][direction]['b'][shot,:]
+        data2=data['mag_probe']['positions']['probe21'][direction]['b'][shot,:]
+        f,f0,comp1,pwr1,mag1,phase1,cos_phase1,interval=spec.spectrum_wwind(data1[start_time_index:end_time_index],timeB_s[start_time_index:end_time_index],window='hanning')
+        f,f0,comp2,pwr2,mag2,phase2,cos_phase2,interval=spec.spectrum_wwind(data2[start_time_index:end_time_index],timeB_s[start_time_index:end_time_index],window='hanning')
         
+        spec1[shot,0,direction_index,:]=(np.abs(comp1))**2
+        spec2[shot,0,direction_index,:]=(np.abs(comp2))**2
+        cross_spec,cross_phase,arr1_autospec,arr2_autospec,cross_coh=cross_spectrum(comp1,comp2,dt) 
         
-        #fig.canvas.mpl_connect('button_press_event', onclick)
-        #plt.show()    
-        #plt.ginput(20,timeout=0)
-        #plt.clf()
-        
-        
-        
-        
-        #savedirectory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\01122022\\QuickPlots\\timeseries\\'+probe+'\\'
-        #savedirectory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\03172022\\QuickPlots\\timeseries\\outerinner\\'+probe+'\\'
-        #savedirectory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\03172022\\QuickPlots\\timeseries\\inneronly\\'+probe+'\\'
-        savedirectory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\03172022\\QuickPlots\\timeseries\\halfouter\\'+probe+'\\'
-        savefilename=probe+'_shot_'+str(shot+1).zfill(2)+'_Bfield.png'
-        savefile = savedirectory+savefilename
-        plt.savefig(savefile,dpi=300,facecolor='w',edgecolor='k')
-        plt.clf()
-        
-        
+        crossphase_fromb[shot,0,direction_index,:]=cross_phase
+        kfrom_crossphase[shot,0,direction_index,:]=cross_phase/port_sep
+            
+#fill spectral density historgram
+kspec=(np.arange(0.5,124*2,0.5)-123)
+ksize=len(kspec)
+spec_density_array = np.zeros([numshots,numprobes,directions,fsize,ksize])
 
-#plot averages and STD per timestep over shots
-        
+for shot in np.arange(numshots):
+    print('On Shot ',shot)
+    for direction_index, direction in enumerate(direction_list):
+        print('On Direction ',direction)            
+        for f in np.arange(fsize):
+            for k in np.arange(ksize-1):
+                if kfrom_crossphase[shot,0,direction_index,f]>kspec[k] and kfrom_crossphase[shot,0,direction_index,f]<=kspec[k+1]:
+                    spec_density_array[shot,0,direction_index,f,k]=(spec1[shot,0,direction_index,f]+spec2[shot,0,direction_index,f])/2
 
-b_timeseries_mean = np.zeros([6,3,24999])
-b_timeseries_std = np.zeros([6,3,24999])
-     
-        
-for probe_index, probe in enumerate(probelist):
-    data1=data['mag_probe']['positions'][probe]['r']['b']
-    data2=data['mag_probe']['positions'][probe]['t']['b']
-    data3=data['mag_probe']['positions'][probe]['z']['b']
+                    
 
-    b_timeseries_mean[probe_index,0,:]=np.mean(data1,axis=0)
-    b_timeseries_mean[probe_index,1,:]=np.mean(data2,axis=0)
-    b_timeseries_mean[probe_index,2,:]=np.mean(data3,axis=0)
-    
-    b_timeseries_std[probe_index,0,:]=np.std(data1,axis=0)
-    b_timeseries_std[probe_index,1,:]=np.std(data2,axis=0)
-    b_timeseries_std[probe_index,2,:]=np.std(data3,axis=0)
-    
-    
-    
 """
-
 
 plt.figure(57)
 plt.plot(velocities[0,0,:],'o')
