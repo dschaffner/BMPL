@@ -41,205 +41,122 @@ directory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\01122022\\'
 #load Wavelets
 Bwv60t160 = loadnpzfile(directory+'Bwaveletbyshot_60t160.npz')
 Bwv60t160 = Bwv60t160['bwave']
-Bwv50t150 = loadnpzfile(directory+'Bwaveletbyshot_50t150.npz')
-Bwv50t150 = Bwv50t150['bwave']
-Bwv50t125 = loadnpzfile(directory+'Bwaveletbyshot_50t125.npz')
-Bwv50t125 = Bwv50t125['bwave']
-Bwv50t100 = loadnpzfile(directory+'Bwaveletbyshot_50t100.npz')
-Bwv50t100 = Bwv50t100['bwave']
+Bwv0t30 = loadnpzfile(directory+'Bwaveletbyshot_0t30.npz')
+Bwv0t30 = Bwv0t30['bwave']
+Bwv160t193 = loadnpzfile(directory+'Bwaveletbyshot_160t193.npz')
+Bwv160t193 = Bwv160t193['bwave']
+Bwvneg6t20 = loadnpzfile(directory+'Bwaveletbyshot_neg6t20.npz')
+Bwvneg6t20 = Bwvneg6t20['bwave']
 Bwv100t150 = loadnpzfile(directory+'Bwaveletbyshot_100t150.npz')
 Bwv100t150 = Bwv100t150['bwave']
-Bwv60t110 = loadnpzfile(directory+'Bwaveletbyshot_60t110.npz')
-Bwv60t110 = Bwv60t110['bwave']
-Bwv60t135 = loadnpzfile(directory+'Bwaveletbyshot_60t135.npz')
-Bwv60t135 = Bwv60t135['bwave']
-Bwv60t140 = loadnpzfile(directory+'Bwaveletbyshot_60t140.npz')
-Bwv60t140 = Bwv60t140['bwave']
+
+directory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\03172022\\Bwavelet_inneronly\\'
+Bwv60t160_317_inner = loadnpzfile(directory+'Bwaveletbyshot_60t160.npz')
+Bwv60t160_317_inner = Bwv60t160_317_inner['bwave']
+Bwv0t30_317_inner = loadnpzfile(directory+'Bwaveletbyshot_0t30.npz')
+Bwv0t30_317_inner = Bwv0t30_317_inner['bwave']
+Bwv160t193_317_inner = loadnpzfile(directory+'Bwaveletbyshot_160t193.npz')
+Bwv160t193_317_inner = Bwv160t193_317_inner['bwave']
+Bwvneg6t20_317_inner = loadnpzfile(directory+'Bwaveletbyshot_neg6t20.npz')
+Bwvneg6t20_317_inner = Bwvneg6t20_317_inner['bwave']
+Bwv100t150_317_inner = loadnpzfile(directory+'Bwaveletbyshot_100t150.npz')
+Bwv100t150_317_inner = Bwv100t150_317_inner['bwave']
+
+directory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\03172022\\Bwavelet_outer_inner\\'
+Bwv60t160_317_innerouter = loadnpzfile(directory+'Bwaveletbyshot_60t160.npz')
+Bwv60t160_317_innerouter = Bwv60t160_317_innerouter['bwave']
+Bwv0t30_317_innerouter = loadnpzfile(directory+'Bwaveletbyshot_0t30.npz')
+Bwv0t30_317_innerouter = Bwv0t30_317_innerouter['bwave']
+Bwv160t193_317_innerouter = loadnpzfile(directory+'Bwaveletbyshot_160t193.npz')
+Bwv160t193_317_innerouter = Bwv160t193_317_innerouter['bwave']
+Bwvneg6t20_317_innerouter = loadnpzfile(directory+'Bwaveletbyshot_neg6t20.npz')
+Bwvneg6t20_317_innerouter = Bwvneg6t20_317_innerouter['bwave']
+Bwv100t150_317_innerouter = loadnpzfile(directory+'Bwaveletbyshot_100t150.npz')
+Bwv100t150_317_innerouter = Bwv100t150_317_innerouter['bwave']
+
+directory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\03172022\\Bwavelet_halfouter_inner\\'
+Bwv60t160_317_innerouterhalf = loadnpzfile(directory+'Bwaveletbyshot_60t160.npz')
+Bwv60t160_317_innerouterhalf = Bwv60t160_317_innerouterhalf['bwave']
+Bwv0t30_317_innerouterhalf = loadnpzfile(directory+'Bwaveletbyshot_0t30.npz')
+Bwv0t30_317_innerouterhalf = Bwv0t30_317_innerouterhalf['bwave']
+Bwv160t193_317_innerouterhalf = loadnpzfile(directory+'Bwaveletbyshot_160t193.npz')
+Bwv160t193_317_innerouterhalf = Bwv160t193_317_innerouterhalf['bwave']
+Bwvneg6t20_317_innerouterhalf = loadnpzfile(directory+'Bwaveletbyshot_neg6t20.npz')
+Bwvneg6t20_317_innerouterhalf = Bwvneg6t20_317_innerouterhalf['bwave']
+Bwv100t150_317_innerouterhalf = loadnpzfile(directory+'Bwaveletbyshot_100t150.npz')
+Bwv100t150_317_innerouterhalf = Bwv100t150_317_innerouterhalf['bwave']
+
+directory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\04112022\\'
+Bwv60t160_411 = loadnpzfile(directory+'Bwaveletbyshot_60t160.npz')
+Bwv60t160_411 = Bwv60t160_411['bwave']
+Bwv0t30_411 = loadnpzfile(directory+'Bwaveletbyshot_0t30.npz')
+Bwv0t30_411 = Bwv0t30_411['bwave']
+Bwv160t193_411 = loadnpzfile(directory+'Bwaveletbyshot_160t193.npz')
+Bwv160t193_411 = Bwv160t193_411['bwave']
+Bwvneg6t20_411 = loadnpzfile(directory+'Bwaveletbyshot_neg6t20.npz')
+Bwvneg6t20_411 = Bwvneg6t20_411['bwave']
+Bwv100t150_411 = loadnpzfile(directory+'Bwaveletbyshot_100t150.npz')
+Bwv100t150_411 = Bwv100t150_411['bwave']
+
 wvfreq = loadnpzfile(directory+'Bwavelet_frequencies.npz')
-bwavefreq = wvfreq['bwavefreq']
+wvfreq = wvfreq['bwavefreq']
 
-#apply calibration
-
-#load velocities
-sheetdirectory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\01122022\\'
-spreadsheetfile = 'Separation Times by Shot.xlsx'
-sheet = pd.read_excel(sheetdirectory+spreadsheetfile,sheet_name='Bdot Mod Corr 60t160',header=1)
-vels57 = np.array(sheet['57v'])*1000.0#m/s
-vels1921 = np.array(sheet['1921v'])*1000.0#m/s
-vels3335 = np.array(sheet['3335v'])*1000.0#m/s
-velsflags = np.array(sheet['flag'])
-mean_vels57 = np.mean(vels57)
-mean_vels1921 = np.mean(vels1921)
-mean_vels3335 = np.mean(vels3335)
-
-
-numshots=94
-direction_list=['r','t','z']
-probelist=['probe5','probe7','probe19','probe21','probe33','probe35']
-tde_pairs=[['probe5','probe7'],['probe19','probe21'],['probe33','probe35']]
-directions = len(direction_list)
-numprobes = len(probelist)
-
-#Generate wavenumber arrays by wvfreq/velocity(shot,position)
-wavenum = np.zeros([94,6,3072])
-maxwavenum = np.zeros([94,6])
-minwavenum = np.zeros([94,6])
-for shot in np.arange(numshots):
-    if velsflags[shot] == 1: continue
-    wavenum[shot,0,:]=bwavefreq/vels57[shot]
-    wavenum[shot,1,:]=bwavefreq/vels57[shot]
-    wavenum[shot,2,:]=bwavefreq/vels1921[shot]
-    wavenum[shot,3,:]=bwavefreq/vels1921[shot]
-    wavenum[shot,4,:]=bwavefreq/vels3335[shot]
-    wavenum[shot,5,:]=bwavefreq/vels3335[shot]
-    
-    for pos in np.arange(6):
-        maxwavenum[shot,pos]=np.max(wavenum[shot,pos,:])
-        minwavenum[shot,pos]=np.min(wavenum[shot,pos,:])
-    
-
-   
-probelist=['probe5','probe7','probe19','probe21','probe33','probe35']
-##interpolate wavenumber traces to sum wavenumber wavelet spectra together
-newwavenum = np.arange(0.41,231,0.001)
-power_interp_60t160 = np.zeros([numshots,numprobes,directions,len(newwavenum)])
-power_interp_50t150 = np.zeros([numshots,numprobes,directions,len(newwavenum)])
-power_interp_50t125 = np.zeros([numshots,numprobes,directions,len(newwavenum)])
-power_interp_50t100 = np.zeros([numshots,numprobes,directions,len(newwavenum)])
-power_interp_100t150 = np.zeros([numshots,numprobes,directions,len(newwavenum)])
-power_interp_60t110 = np.zeros([numshots,numprobes,directions,len(newwavenum)])
-power_interp_60t135 = np.zeros([numshots,numprobes,directions,len(newwavenum)])
-power_interp_60t140 = np.zeros([numshots,numprobes,directions,len(newwavenum)])
-for shot in np.arange(numshots):
-    if velsflags[shot] == 1: continue
-    for probe_index, probe in enumerate(probelist):
-        for direction_index, direction in enumerate(direction_list):
-            x=wavenum[shot,probe_index,:]
             
-            #interpolate 60t160
-            y=Bwv60t160[shot,probe_index,direction_index,:]
-            f=interp1d(x,y)
-            power_interp_60t160[shot,probe_index,direction_index,:]=f(newwavenum)
-            
-            #interpolate 50t150
-            y=Bwv50t150[shot,probe_index,direction_index,:]
-            f=interp1d(x,y)
-            power_interp_50t150[shot,probe_index,direction_index,:]=f(newwavenum)
-            
-            #interpolate 50t125
-            y=Bwv50t125[shot,probe_index,direction_index,:]
-            f=interp1d(x,y)
-            power_interp_50t125[shot,probe_index,direction_index,:]=f(newwavenum)
-            
-            #interpolate 50t100
-            y=Bwv50t150[shot,probe_index,direction_index,:]
-            f=interp1d(x,y)
-            power_interp_50t100[shot,probe_index,direction_index,:]=f(newwavenum)
-            
-            #interpolate 100t150
-            y=Bwv100t150[shot,probe_index,direction_index,:]
-            f=interp1d(x,y)
-            power_interp_100t150[shot,probe_index,direction_index,:]=f(newwavenum)
-            
-            #interpolate 60t110
-            y=Bwv60t110[shot,probe_index,direction_index,:]
-            f=interp1d(x,y)
-            power_interp_60t110[shot,probe_index,direction_index,:]=f(newwavenum)
-            
-            #interpolate 60t135
-            y=Bwv60t135[shot,probe_index,direction_index,:]
-            f=interp1d(x,y)
-            power_interp_60t135[shot,probe_index,direction_index,:]=f(newwavenum)
-            
-            #interpolate 60t140
-            y=Bwv60t140[shot,probe_index,direction_index,:]
-            f=interp1d(x,y)
-            power_interp_60t140[shot,probe_index,direction_index,:]=f(newwavenum)
-            
-mean_power_interp_60t160 = np.mean(power_interp_60t160,axis=0)
-mean_power_interp_60t160_trace = np.mean(mean_power_interp_60t160,axis=1)
 mean_Bwv60t160 = np.mean(Bwv60t160,axis=0)
 mean_Bwv60t160_trace = np.mean(mean_Bwv60t160,axis=1)
-
-mean_power_interp_50t150 = np.mean(power_interp_50t150,axis=0)
-mean_power_interp_50t150_trace = np.mean(mean_power_interp_50t150,axis=1)
-mean_Bwv50t150 = np.mean(Bwv50t150,axis=0)
-mean_Bwv50t150_trace = np.mean(mean_Bwv50t150,axis=1)
-
-mean_power_interp_50t125 = np.mean(power_interp_50t125,axis=0)
-mean_power_interp_50t125_trace = np.mean(mean_power_interp_50t125,axis=1)
-mean_Bwv50t125 = np.mean(Bwv50t125,axis=0)
-mean_Bwv50t125_trace = np.mean(mean_Bwv50t125,axis=1)
-
-mean_power_interp_50t100 = np.mean(power_interp_50t100,axis=0)
-mean_power_interp_50t100_trace = np.mean(mean_power_interp_50t100,axis=1)
-mean_Bwv50t100 = np.mean(Bwv50t100,axis=0)
-mean_Bwv50t100_trace = np.mean(mean_Bwv50t100,axis=1)
-
-mean_power_interp_100t150 = np.mean(power_interp_100t150,axis=0)
-mean_power_interp_100t150_trace = np.mean(mean_power_interp_100t150,axis=1)
 mean_Bwv100t150 = np.mean(Bwv100t150,axis=0)
 mean_Bwv100t150_trace = np.mean(mean_Bwv100t150,axis=1)
+mean_Bwv0t30 = np.mean(Bwv0t30,axis=0)
+mean_Bwv0t30_trace = np.mean(mean_Bwv0t30,axis=1)
+mean_Bwv160t193 = np.mean(Bwv160t193,axis=0)
+mean_Bwv160t193_trace = np.mean(mean_Bwv160t193,axis=1)
+mean_Bwvneg6t20 = np.mean(Bwvneg6t20,axis=0)
+mean_Bwvneg6t20_trace = np.mean(mean_Bwvneg6t20,axis=1)   
 
-mean_power_interp_60t110 = np.mean(power_interp_60t110,axis=0)
-mean_power_interp_60t110_trace = np.mean(mean_power_interp_60t110,axis=1)
-mean_Bwv60t110 = np.mean(Bwv60t110,axis=0)
-mean_Bwv60t110_trace = np.mean(mean_Bwv60t110,axis=1)
+mean_Bwv60t160_317_inner = np.mean(Bwv60t160_317_inner,axis=0)
+mean_Bwv60t160_317_inner_trace = np.mean(mean_Bwv60t160_317_inner,axis=1)
+mean_Bwv100t150_317_inner = np.mean(Bwv100t150_317_inner,axis=0)
+mean_Bwv100t150_317_inner_trace = np.mean(mean_Bwv100t150_317_inner,axis=1)
+mean_Bwv0t30_317_inner = np.mean(Bwv0t30_317_inner,axis=0)
+mean_Bwv0t30_317_inner_trace = np.mean(mean_Bwv0t30_317_inner,axis=1)
+mean_Bwv160t193_317_inner = np.mean(Bwv160t193_317_inner,axis=0)
+mean_Bwv160t193_317_inner_trace = np.mean(mean_Bwv160t193_317_inner,axis=1)
+mean_Bwvneg6t20_317_inner = np.mean(Bwvneg6t20_317_inner,axis=0)
+mean_Bwvneg6t20_317_inner_trace = np.mean(mean_Bwvneg6t20_317_inner,axis=1) 
 
-mean_power_interp_60t135 = np.mean(power_interp_60t135,axis=0)
-mean_power_interp_60t135_trace = np.mean(mean_power_interp_60t135,axis=1)
-mean_Bwv60t135 = np.mean(Bwv60t135,axis=0)
-mean_Bwv60t135_trace = np.mean(mean_Bwv60t135,axis=1)
+mean_Bwv60t160_317_innerouter = np.mean(Bwv60t160_317_innerouter,axis=0)
+mean_Bwv60t160_317_innerouter_trace = np.mean(mean_Bwv60t160_317_innerouter,axis=1)
+mean_Bwv100t150_317_innerouter = np.mean(Bwv100t150_317_innerouter,axis=0)
+mean_Bwv100t150_317_innerouter_trace = np.mean(mean_Bwv100t150_317_innerouter,axis=1)
+mean_Bwv0t30_317_innerouter = np.mean(Bwv0t30_317_innerouter,axis=0)
+mean_Bwv0t30_317_innerouter_trace = np.mean(mean_Bwv0t30_317_innerouter,axis=1)
+mean_Bwv160t193_317_innerouter = np.mean(Bwv160t193_317_innerouter,axis=0)
+mean_Bwv160t193_317_innerouter_trace = np.mean(mean_Bwv160t193_317_innerouter,axis=1)
+mean_Bwvneg6t20_317_innerouter = np.mean(Bwvneg6t20_317_innerouter,axis=0)
+mean_Bwvneg6t20_317_innerouter_trace = np.mean(mean_Bwvneg6t20_317_innerouter,axis=1)  
 
-mean_power_interp_60t140 = np.mean(power_interp_60t140,axis=0)
-mean_power_interp_60t140_trace = np.mean(mean_power_interp_60t140,axis=1)
-mean_Bwv60t140 = np.mean(Bwv60t140,axis=0)
-mean_Bwv60t140_trace = np.mean(mean_Bwv60t140,axis=1)   
-            
-np.savez(directory+'all_processed_wavlet_spectra_corrvel.npz',
-         #power_interp_50t150=power_interp_50t150,
-         #power_interp_50t125=power_interp_50t125,
-         #power_interp_50t100=power_interp_50t100,
-         #power_interp_100t150=power_interp_100t150,
-         #power_interp_60t110=power_interp_60t110,
-         #power_interp_60t135=power_interp_60t135,
-         #power_interp_60t140=power_interp_60t140,
-         mean_power_interp_60t160=mean_power_interp_60t160,
-         mean_power_interp_50t150=mean_power_interp_50t150,
-         mean_power_interp_50t125=mean_power_interp_50t125,
-         mean_power_interp_50t100=mean_power_interp_50t100,
-         mean_power_interp_100t150=mean_power_interp_100t150,
-         mean_power_interp_60t110=mean_power_interp_60t110,
-         mean_power_interp_60t135=mean_power_interp_60t135,
-         mean_power_interp_60t140=mean_power_interp_60t140,
-         mean_power_interp_60t160_trace=mean_power_interp_60t160_trace,
-         mean_power_interp_50t150_trace=mean_power_interp_50t150_trace,
-         mean_power_interp_50t125_trace=mean_power_interp_50t125_trace,
-         mean_power_interp_50t100_trace=mean_power_interp_50t100_trace,
-         mean_power_interp_100t150_trace=mean_power_interp_100t150_trace,
-         mean_power_interp_60t110_trace=mean_power_interp_60t110_trace,
-         mean_power_interp_60t135_trace=mean_power_interp_60t135_trace,
-         mean_power_interp_60t140_trace=mean_power_interp_60t140_trace,
-         mean_Bwv60t160=mean_Bwv60t160,
-         mean_Bwv50t150=mean_Bwv50t150,
-         mean_Bwv50t125=mean_Bwv50t125,
-         mean_Bwv50t100=mean_Bwv50t100,
-         mean_Bwv100t150=mean_Bwv100t150,
-         mean_Bwv60t110=mean_Bwv60t110,
-         mean_Bwv60t135=mean_Bwv60t135,
-         mean_Bwv60t140=mean_Bwv60t140,
-         mean_Bwv60t160_trace=mean_Bwv60t160_trace,
-         mean_Bwv50t150_trace=mean_Bwv50t150_trace,
-         mean_Bwv50t125_trace=mean_Bwv50t125_trace,
-         mean_Bwv50t100_trace=mean_Bwv50t100_trace,
-         mean_Bwv100t150_trace=mean_Bwv100t150_trace,
-         mean_Bwv60t110_trace=mean_Bwv60t110_trace,
-         mean_Bwv60t135_trace=mean_Bwv60t135_trace,
-         mean_Bwv60t140_trace=mean_Bwv60t140_trace,
-         wavenum=newwavenum,
-         freq=bwavefreq
-         )       
-            
+mean_Bwv60t160_317_innerouterhalf = np.mean(Bwv60t160_317_innerouterhalf,axis=0)
+mean_Bwv60t160_317_innerouterhalf_trace = np.mean(mean_Bwv60t160_317_innerouterhalf,axis=1)
+mean_Bwv100t150_317_innerouterhalf = np.mean(Bwv100t150_317_innerouterhalf,axis=0)
+mean_Bwv100t150_317_innerouterhalf_trace = np.mean(mean_Bwv100t150_317_innerouterhalf,axis=1)
+mean_Bwv0t30_317_innerouterhalf = np.mean(Bwv0t30_317_innerouterhalf,axis=0)
+mean_Bwv0t30_317_innerouterhalf_trace = np.mean(mean_Bwv0t30_317_innerouterhalf,axis=1)
+mean_Bwv160t193_317_innerouterhalf = np.mean(Bwv160t193_317_innerouterhalf,axis=0)
+mean_Bwv160t193_317_innerouterhalf_trace = np.mean(mean_Bwv160t193_317_innerouterhalf,axis=1)
+mean_Bwvneg6t20_317_innerouterhalf = np.mean(Bwvneg6t20_317_innerouterhalf,axis=0)
+mean_Bwvneg6t20_317_innerouterhalf_trace = np.mean(mean_Bwvneg6t20_317_innerouterhalf,axis=1)  
+
+mean_Bwv60t160_411 = np.mean(Bwv60t160_411,axis=0)
+mean_Bwv60t160_411_trace = np.mean(mean_Bwv60t160_411,axis=1)
+mean_Bwv100t150_411 = np.mean(Bwv100t150_411,axis=0)
+mean_Bwv100t150_411_trace = np.mean(mean_Bwv100t150_411,axis=1)
+mean_Bwv0t30_411 = np.mean(Bwv0t30_411,axis=0)
+mean_Bwv0t30_411_trace = np.mean(mean_Bwv0t30_411,axis=1)
+mean_Bwv160t193_411 = np.mean(Bwv160t193_411,axis=0)
+mean_Bwv160t193_411_trace = np.mean(mean_Bwv160t193_411,axis=1)
+mean_Bwvneg6t20_411 = np.mean(Bwvneg6t20_411,axis=0)
+mean_Bwvneg6t20_411_trace = np.mean(mean_Bwvneg6t20_411,axis=1)               
+
 """
 
 

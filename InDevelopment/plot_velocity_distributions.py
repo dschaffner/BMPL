@@ -10,7 +10,8 @@ import pandas as pd
 import matplotlib.pylab as plt
 sheetdirectory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\01122022\\'
 spreadsheetfile = 'Separation Times by Shot.xlsx'
-sheet = pd.read_excel(sheetdirectory+spreadsheetfile,header=1)
+#sheet = pd.read_excel(sheetdirectory+spreadsheetfile,header=1)
+sheet = pd.read_excel(sheetdirectory+spreadsheetfile,sheet_name='Bdot Mod Corr 60t160',header=1)
 vels57 = np.array(sheet['57v'])
 vels1921 = np.array(sheet['1921v'])
 vels3335 = np.array(sheet['3335v'])
@@ -46,46 +47,47 @@ wspace = 0.2   # the amount of width reserved for blank space between subplots
 hspace = 0.3   # the amount of height reserved for white space between subplots
 plt.subplots_adjust(left=left, bottom=bottom, right=right, top=top, wspace=wspace, hspace=hspace)
 ax1=plt.subplot(3,1,1)
-plt.hist(vels57, bins=20,range=(0,100))  # arguments are passed to np.histogram
+plt.hist(vels57, bins=24,range=(0,120))  # arguments are passed to np.histogram
 plt.title('Probe 5 to 7')
 plt.xticks(fontsize=12)
 plt.xlabel(r'Bulk Vel. [km/s]',fontsize=16)
-plt.xlim(0,100)
+plt.xlim(0,120)
 #plt.yticks(np.array([0,2,4,6,8,10]),[0,2,4,6,8,10],fontsize=12)
 plt.ylabel('Count',fontsize=16)
 #plt.xlim(50,82)
-plt.ylim(0,25)
-plt.vlines(mean_vels57,0,25,linestyle='dashed',color='black')
+plt.ylim(0,50)
+plt.vlines(mean_vels57,0,50,linestyle='dashed',color='black')
 plt.text(mean_vels57+5,20,'Mean = '+str(round(mean_vels57,1)),fontsize=12)
 
 ax1=plt.subplot(3,1,2)
-plt.hist(vels1921, bins=20,range=(0,100))  # arguments are passed to np.histogram
+plt.hist(vels1921, bins=24,range=(0,120))  # arguments are passed to np.histogram
 plt.title('Probe 19 to 21')
 plt.xticks(fontsize=12)
 plt.xlabel(r'Bulk Vel. [km/s]',fontsize=16)
-plt.xlim(0,100)
+plt.xlim(0,120)
 #plt.yticks(np.array([0,2,4,6,8,10]),[0,2,4,6,8,10],fontsize=12)
 plt.ylabel('Count',fontsize=16)
-plt.ylim(0,25)
-plt.vlines(mean_vels1921,0,25,linestyle='dashed',color='black')
+plt.ylim(0,50)
+plt.vlines(mean_vels1921,0,50,linestyle='dashed',color='black')
 plt.text(mean_vels1921+5,20,'Mean = '+str(round(mean_vels1921,1)),fontsize=12)
 
 
 ax1=plt.subplot(3,1,3)
-plt.hist(vels3335, bins=20,range=(0,100))  # arguments are passed to np.histogram
+plt.hist(vels3335, bins=24,range=(0,120))  # arguments are passed to np.histogram
 plt.title('Probe 33 to 35')
 plt.xticks(fontsize=12)
 plt.xlabel(r'Bulk Vel. [km/s]',fontsize=16)
-plt.xlim(0,100)
+plt.xlim(0,120)
 #plt.yticks(np.array([0,2,4,6,8,10]),[0,2,4,6,8,10],fontsize=12)
 plt.ylabel('Count',fontsize=16)
-plt.ylim(0,25)
-plt.vlines(mean_vels3335,0,25,linestyle='dashed',color='black')
+plt.ylim(0,50)
+plt.vlines(mean_vels3335,0,50,linestyle='dashed',color='black')
 plt.text(mean_vels3335+5,20,'Mean = '+str(round(mean_vels3335,1)),fontsize=12)
 
 
 save_dir = 'C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\01122022\\QuickPlots\\velocity\\'
-savefilename = 'Velocity_Distribution_fromfluxarrival.png'
+#savefilename = 'Velocity_Distribution_fromfluxarrival.png'
+savefilename = 'Velocity_Distribution_fromcorr60t160.png'
 plt.savefig(save_dir+savefilename,dpi=600,facecolor='white',edgecolor='black')
 plt.clf()
 plt.close()
@@ -121,7 +123,8 @@ plt.vlines(mean_vdeltas_1921to3335,0,20,linestyle='dashed',color='black')
 plt.text(mean_vdeltas_1921to3335+10,15,'Mean = '+str(round(mean_vdeltas_1921to3335,1)),fontsize=12)
 
 
-savefilename = 'Velocity_deltas_pershot_fromfluxarrival.png'
+#savefilename = 'Velocity_deltas_pershot_fromfluxarrival.png'
+savefilename = 'Velocity_deltas_pershot_fromcorr60t160.png'
 plt.savefig(save_dir+savefilename,dpi=600,facecolor='white',edgecolor='black')
 plt.clf()
 plt.close()

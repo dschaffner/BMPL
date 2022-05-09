@@ -23,8 +23,19 @@ fs = 125e6
 lowcut = 50e3
 highcut = 2e6
 
-directory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\01122022\\'
-datafilename='Dataset_01122022.h5'
+#directory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\01122022\\'
+#datafilename='Dataset_01122022.h5'
+#directory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\04112022\\'
+#datafilename='Dataset_04112022.h5'
+#directory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\03172022\\'
+#datafilename='Dataset_03172022_halfouter_inner.h5'
+directory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\03172022\\'
+datafilename='Dataset_03172022_outer_inner.h5'
+#directory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\03172022\\'
+#datafilename='Dataset_03172022_inneronly.h5'
+
+
+
 data=load_hdf5(directory+datafilename,verbose=True)
 
 
@@ -39,11 +50,17 @@ end_time_index = iff.tindex_min(analysis_end_time,timeB_us)
 timerange_limit = 3e-6#s
 port_sep = 0.0254#m
 
-numshots=94
+
 direction_list=['r','t','z']
 probelist=['probe5','probe7','probe19','probe21','probe33','probe35']
 directions = len(direction_list)
 numprobes = len(probelist)
+
+#determine number of shots
+arr=data['mag_probe']['positions']['probe5']['r']['bdot']
+numshots=int(arr.shape[0])
+#numshots=94#01122022
+#numshots=10#04112022
 
 #determine Wavelet size
 arr=data['mag_probe']['positions']['probe5']['r']['bdot'][0,:]
@@ -56,7 +73,8 @@ fsize=len(wvfreq)
 np.savez(directory+'Bwavelet_frequencies',bwavefreq=wvfreq)
 
 
-"""
+
+
 
 #generate an output array
 avebwv_frombdot = np.zeros([numprobes,directions,fsize])
@@ -68,6 +86,10 @@ avebwv_frombdot_pershot100t150 = np.zeros([numshots,numprobes,directions,fsize])
 avebwv_frombdot_pershot60t110 = np.zeros([numshots,numprobes,directions,fsize])
 avebwv_frombdot_pershot60t135 = np.zeros([numshots,numprobes,directions,fsize])
 avebwv_frombdot_pershot60t140 = np.zeros([numshots,numprobes,directions,fsize])
+avebwv_frombdot_pershot0t30 = np.zeros([numshots,numprobes,directions,fsize])
+avebwv_frombdot_pershotneg6t20 = np.zeros([numshots,numprobes,directions,fsize])
+avebwv_frombdot_pershot160t193 = np.zeros([numshots,numprobes,directions,fsize])
+
 #avebmagspec = np.zeros([numprobes,fsize])
 #spec_frombdot = np.zeros([numshots,numprobes,directions,fsize])
 #spec_frombdot_sm = np.zeros([numshots,numprobes,directions,fsize])
@@ -80,6 +102,35 @@ for shot in np.arange(numshots):
         for direction_index, direction in enumerate(direction_list):
             data1=data['mag_probe']['positions'][probe][direction]['bdot'][shot,:]
             Bpwr,Bscalespec,wvfreq,Bfft,fftfreq = cw.compute_wavelet(data1,np.array(time_us))
+            
+            #-6 to 20us            
+            analysis_start_time = -6
+            analysis_end_time = 20
+            start_time_index = iff.tindex_min(analysis_start_time,timeB_us)
+            end_time_index = iff.tindex_min(analysis_end_time,timeB_us)
+            Bpwrslice = Bpwr[:,start_time_index:end_time_index]
+            Bpwrslice_sum = np.sum(Bpwrslice,axis=1)
+            avebwv_frombdot_pershotneg6t20[shot,probe_index,direction_index,:]=Bpwrslice_sum
+            
+            #0 to 30us            
+            analysis_start_time = 0
+            analysis_end_time = 30
+            start_time_index = iff.tindex_min(analysis_start_time,timeB_us)
+            end_time_index = iff.tindex_min(analysis_end_time,timeB_us)
+            Bpwrslice = Bpwr[:,start_time_index:end_time_index]
+            Bpwrslice_sum = np.sum(Bpwrslice,axis=1)
+            avebwv_frombdot_pershot0t30[shot,probe_index,direction_index,:]=Bpwrslice_sum
+            
+            #160 to 193us            
+            analysis_start_time = 160
+            analysis_end_time = 193
+            start_time_index = iff.tindex_min(analysis_start_time,timeB_us)
+            end_time_index = iff.tindex_min(analysis_end_time,timeB_us)
+            Bpwrslice = Bpwr[:,start_time_index:end_time_index]
+            Bpwrslice_sum = np.sum(Bpwrslice,axis=1)
+            avebwv_frombdot_pershot160t193[shot,probe_index,direction_index,:]=Bpwrslice_sum
+            
+
 
             #60 to 160us            
             analysis_start_time = 60
@@ -164,7 +215,10 @@ np.savez(directory+'Bwaveletbyshot_100t150',bwave=avebwv_frombdot_pershot100t150
 np.savez(directory+'Bwaveletbyshot_60t110',bwave=avebwv_frombdot_pershot60t110)
 np.savez(directory+'Bwaveletbyshot_60t135',bwave=avebwv_frombdot_pershot60t135)
 np.savez(directory+'Bwaveletbyshot_60t140',bwave=avebwv_frombdot_pershot60t140)
-"""
+np.savez(directory+'Bwaveletbyshot_neg6t20',bwave=avebwv_frombdot_pershotneg6t20)
+np.savez(directory+'Bwaveletbyshot_0t30',bwave=avebwv_frombdot_pershot0t30)
+np.savez(directory+'Bwaveletbyshot_160t193',bwave=avebwv_frombdot_pershot160t193)
+
 
 
 """
