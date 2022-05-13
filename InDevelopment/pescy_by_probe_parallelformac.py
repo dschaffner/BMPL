@@ -60,6 +60,51 @@ nfac = factorial(embeddelay)
 PEs = np.zeros([num_delays])
 SCs = np.zeros([num_delays])
 
+
+#Need to convert hdf5 file into an array in order to pickle it for multiprocessing
+data=np.array(data)
+
+def pescy(data,loop_delay,embeddelay,numshots,probelist,direction_list):
+    permstore_counter = []
+    permstore_counter = Counter(permstore_counter)
+    tot_perms = 0
+    for shot in np.arange(numshots):
+        print ('On Shot: ',shot)
+        for probe_index, probe in enumerate(probelist):
+            #print ('On Probe: ',probe)
+            for direction_index, direction in enumerate(direction_list):
+                #print('On Direction: ',direction)
+                data1=data['mag_probe']['positions'][probe][direction]['b'][shot,:]
+                arr,nperms,embed = constructPatternCount(data1,embeddelay,delay=loop_delay)
+                permstore_counter = permstore_counter+arr
+                tot_perms = tot_perms+nperms
+    PE_tot,PE_tot_Se = calcS_fromPatternCount(permstore_counter,tot_perms,embed)
+    C =  -2.*((PE_tot_Se - 0.5*PE_tot - 0.5*np.log2(nfac))
+             /((1 + 1./nfac)*np.log2(nfac+1) - 2*np.log2(2*nfac) 
+            + np.log2(nfac))*(PE_tot/np.log2(nfac)))
+    PE=PE_tot/np.log2(nfac)
+    SC=C
+    return PE,SC
+
+
+from joblib import Parallel, delayed
+import multiprocessing
+#what are your inputs, and what operation do you want to perform
+#on each input. For example
+inputs = range(10)
+def processInput(i):
+    return i*i
+num_cores = multiprocessing.cpu_count()
+results = Parallel(n_jobs=1)(delayed(pescy)(data,delay_array[loop_delay],embeddelay,numshots,probelist,direction_list) for loop_delay in np.arange(len(delay_array)))
+
+p=np.array(results)
+PEs2=p[:,0]
+SCs2=p[:,1]
+
+for loop_delay in np.arange(len(delay_array)):
+    if (loop_delay%100)==0: print( 'On Delay ',delay_array[loop_delay])
+    PEs[loop_delay],SCs[loop_delay]=pescy(data,delay_array[loop_delay],embeddelay,numshots,probelist,direction_list)    
+"""
 for loop_delay in np.arange(len(delay_array)):
     if (loop_delay%100)==0: print( 'On Delay ',delay_array[loop_delay])
     permstore_counter = []
@@ -81,6 +126,7 @@ for loop_delay in np.arange(len(delay_array)):
             + np.log2(nfac))*(PE_tot/np.log2(nfac)))
     PEs[loop_delay]=PE_tot/np.log2(nfac)
     SCs[loop_delay]=C
+"""
 
 end=time.time()
 totaltime=end-start
