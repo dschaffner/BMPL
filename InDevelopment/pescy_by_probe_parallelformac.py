@@ -62,22 +62,25 @@ SCs = np.zeros([num_delays])
 
 
 #Need to convert hdf5 file into an array in order to pickle it for multiprocessing
-data=np.array(data)
+#data=np.array(data)
+datastore=np.zeros([3,numshots,24999])
+datastore[0,:,:]=data['mag_probe']['positions']['probe5']['r']['b'][:10,:]
+datastore[1,:,:]=data['mag_probe']['positions']['probe5']['t']['b'][:10,:]
+datastore[2,:,:]=data['mag_probe']['positions']['probe5']['z']['b'][:10,:]
 
-def pescy(data,loop_delay,embeddelay,numshots,probelist,direction_list):
+
+def pescy(data,loop_delay,embeddelay,numshots):
     permstore_counter = []
     permstore_counter = Counter(permstore_counter)
     tot_perms = 0
     for shot in np.arange(numshots):
         print ('On Shot: ',shot)
-        for probe_index, probe in enumerate(probelist):
-            #print ('On Probe: ',probe)
-            for direction_index, direction in enumerate(direction_list):
-                #print('On Direction: ',direction)
-                data1=data['mag_probe']['positions'][probe][direction]['b'][shot,:]
-                arr,nperms,embed = constructPatternCount(data1,embeddelay,delay=loop_delay)
-                permstore_counter = permstore_counter+arr
-                tot_perms = tot_perms+nperms
+        for direction_index in np.arange(3):
+            #print('On Direction: ',direction)
+            data1=data[direction_index,shot,:]
+            arr,nperms,embed = constructPatternCount(data1,embeddelay,delay=loop_delay)
+            permstore_counter = permstore_counter+arr
+            tot_perms = tot_perms+nperms
     PE_tot,PE_tot_Se = calcS_fromPatternCount(permstore_counter,tot_perms,embed)
     C =  -2.*((PE_tot_Se - 0.5*PE_tot - 0.5*np.log2(nfac))
              /((1 + 1./nfac)*np.log2(nfac+1) - 2*np.log2(2*nfac) 
@@ -95,7 +98,7 @@ inputs = range(10)
 def processInput(i):
     return i*i
 num_cores = multiprocessing.cpu_count()
-results = Parallel(n_jobs=1)(delayed(pescy)(data,delay_array[loop_delay],embeddelay,numshots,probelist,direction_list) for loop_delay in np.arange(len(delay_array)))
+results = Parallel(n_jobs=2)(delayed(pescy)(datastore,delay_array[loop_delay],embeddelay,numshots) for loop_delay in np.arange(len(delay_array)))
 
 p=np.array(results)
 PEs2=p[:,0]
@@ -103,8 +106,12 @@ SCs2=p[:,1]
 
 for loop_delay in np.arange(len(delay_array)):
     if (loop_delay%100)==0: print( 'On Delay ',delay_array[loop_delay])
-    PEs[loop_delay],SCs[loop_delay]=pescy(data,delay_array[loop_delay],embeddelay,numshots,probelist,direction_list)    
+    PEs[loop_delay],SCs[loop_delay]=pescy(datastore,delay_array[loop_delay],embeddelay,numshots)    
+
+
+
 """
+
 for loop_delay in np.arange(len(delay_array)):
     if (loop_delay%100)==0: print( 'On Delay ',delay_array[loop_delay])
     permstore_counter = []
@@ -112,14 +119,12 @@ for loop_delay in np.arange(len(delay_array)):
     tot_perms = 0
     for shot in np.arange(numshots):
         print ('On Shot: ',shot)
-        for probe_index, probe in enumerate(probelist):
-            #print ('On Probe: ',probe)
-            for direction_index, direction in enumerate(direction_list):
-                #print('On Direction: ',direction)
-                data1=data['mag_probe']['positions'][probe][direction]['b'][shot,:]
-                arr,nperms,embed = constructPatternCount(data1,embeddelay,delay=delay_array[loop_delay])
-                permstore_counter = permstore_counter+arr
-                tot_perms = tot_perms+nperms
+        for direction_index in np.arange(3):
+            #print('On Direction: ',direction)
+            data1=datastore[direction_index,shot,:]
+            arr,nperms,embed = constructPatternCount(data1,embeddelay,delay=delay_array[loop_delay])
+            permstore_counter = permstore_counter+arr
+            tot_perms = tot_perms+nperms
     PE_tot,PE_tot_Se = calcS_fromPatternCount(permstore_counter,tot_perms,embed)
     C =  -2.*((PE_tot_Se - 0.5*PE_tot - 0.5*np.log2(nfac))
              /((1 + 1./nfac)*np.log2(nfac+1) - 2*np.log2(2*nfac) 
