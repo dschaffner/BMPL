@@ -18,6 +18,7 @@ from scipy.interpolate import interp1d
 from calc_PE_SC import PE, CH, PE_dist, PE_calc_only
 from collections import Counter
 from math import factorial
+#%%cell 1
 
 
 from scipy.signal import butter, sosfiltfilt, sosfreqz
@@ -28,7 +29,7 @@ def butter_bandpass(lowcut, highcut, fs, order=5):
         high = highcut / nyq
         sos = butter(order, [low, high], analog=False, btype='band', output='sos')
         return sos
-
+#%%
 def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
         sos = butter_bandpass(lowcut, highcut, fs, order=order)
         y = sosfiltfilt(sos, data)
