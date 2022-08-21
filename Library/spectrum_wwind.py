@@ -11,10 +11,6 @@ def spectrum_wwind(array, time, window='hanning'):  # time should be in seconds
     # Calculate time step (assumed to be in seconds)
     dt = time[1]-time[0]
 
-    # prefactor
-    # print 'dt = ',dt
-    prefactor = dt
-
     # Calculate array of frequencies, shift
     w = np.fft.fftfreq(Nw, dt)
     w0 = np.fft.fftshift(w)
@@ -25,6 +21,7 @@ def spectrum_wwind(array, time, window='hanning'):  # time should be in seconds
         bwin = blackman(Nw)  # pretty good
     if window == 'hanning':
         bwin = hanning(Nw)  # pretty good
+        norm = np.sum(bwin)
     if window == 'hamming':
         bwin = hamming(Nw)  # not as good
     if window == 'bartlett':
@@ -35,7 +32,8 @@ def spectrum_wwind(array, time, window='hanning'):  # time should be in seconds
         bwin = 1.0
 
     # Calculate FFT
-    aw = prefactor*np.fft.fft(array*bwin)
+    #aw = prefactor*np.fft.fft(array*bwin)
+    aw = np.fft.fft(array*bwin)
     aw0 = np.fft.fftshift(aw)
 
     # Calcuate Phase
@@ -55,8 +53,7 @@ def spectrum_wwind(array, time, window='hanning'):  # time should be in seconds
     phase2 = phase0[Nwi:]
 
     comp = aw
-    pwr = (np.abs(aw2))**2
-    pwr2 = (np.abs(aw))**2
+    pwr = 2/norm**2*(np.abs(aw2))**2
     mag = np.sqrt(pwr)
     cos_phase = np.cos(phase2)
     freq = w2
