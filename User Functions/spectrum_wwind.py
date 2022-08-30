@@ -24,6 +24,8 @@ def spectrum_wwind(array, time, window='None'):  # time should be in seconds
         bwin = blackman(Nw)  # pretty good
     if window == 'hanning':
         bwin = hanning(Nw)  # pretty good
+        S1 = np.sum(bwin)
+        S2 = np.sum(bwin**2)
     if window == 'hamming':
         bwin = hamming(Nw)  # not as good
     if window == 'bartlett':
