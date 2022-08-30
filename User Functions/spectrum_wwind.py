@@ -52,8 +52,8 @@ def spectrum_wwind(array, time, window='hanning'):  # time should be in seconds
     phase2 = phase0[Nwi:]
 
     comp = aw
-    pwr = (np.abs(aw2))**2
-    pwr2 = (np.abs(aw))**2
+    pwr = 2/S1**2*(np.abs(aw2))**2
+    pwr_den = 2*dt*(np.abs(aw2))**2/S2
     mag = np.sqrt(pwr)
     cos_phase = np.cos(phase2)
     freq = w2
