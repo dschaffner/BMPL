@@ -11,8 +11,6 @@ def spectrum_wwind(array, time, window='None'):  # time should be in seconds
     # Calculate time step (assumed to be in seconds)
     dt = time[1]-time[0]
 
-    # prefactor
-    prefactor = dt
 
     # Calculate array of frequencies, shift
     w = np.fft.fftfreq(Nw, dt)
@@ -34,7 +32,7 @@ def spectrum_wwind(array, time, window='None'):  # time should be in seconds
         bwin = 1.0
 
     # Calculate FFT
-    aw = prefactor*np.fft.fft(array*bwin)
+    aw = np.fft.fft(array*bwin)
     aw0 = np.fft.fftshift(aw)
 
     # Calcuate Phase
