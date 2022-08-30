@@ -59,4 +59,4 @@ def spectrum_wwind(array, time, window='hanning'):  # time should be in seconds
     freq = w2
     freq2 = w
 
-    return freq, freq2, comp, pwr, mag, phase2, cos_phase, dt
+    return freq, freq2, comp, pwr, pwr_den, mag, phase2, cos_phase, dt
