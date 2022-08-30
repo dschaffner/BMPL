@@ -4,7 +4,7 @@ import numpy as np
 from scipy.signal import blackman, bartlett, hanning, hamming
 
 
-def spectrum_wwind(array, time, window='None'):  # time should be in seconds
+def spectrum_wwind(array, time, window='hanning'):  # time should be in seconds
     # Size of array
     Nw = array.shape[0]
 
