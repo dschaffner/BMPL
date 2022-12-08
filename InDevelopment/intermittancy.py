@@ -31,8 +31,12 @@ def generate_deltas_list(timeseries,dt,timestep):
 ### A Gaussian Distribution Should have a Flatness/Kurtosis = 3 ###
     
 #generate gaussian distribution
-mu, sigma = 0, 0.1 # mean and standard deviation
-noise_arr = np.random.normal(mu, sigma, 100000)
+#mu, sigma = 0, 0.1 # mean and standard deviation
+#noise_arr = np.random.normal(mu, sigma, 100000)
+
+#actually data
+
+
 
 #generate list of deltas based on time interval
 dt=1 #unit timestep

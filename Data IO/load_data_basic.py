@@ -22,7 +22,7 @@ def tindex_min(timearr, timevalue):
     return tind
 
 
-directory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\01122022\\'
+directory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2022\\01122022\\'#need to change to your own location
 datafilename='Dataset_01122022.h5'
 data=load_hdf5(directory+datafilename,verbose=True)
 
