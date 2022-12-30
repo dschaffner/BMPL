@@ -4,15 +4,13 @@ import numpy as np
 from scipy.signal import blackman, bartlett, hanning, hamming
 
 
-def spectrum_wwind(array, time, window='None'):  # time should be in seconds
+def spectrum_wwind(array, time, window='hanning'):  # time should be in seconds
     # Size of array
     Nw = array.shape[0]
 
     # Calculate time step (assumed to be in seconds)
     dt = time[1]-time[0]
 
-    # prefactor
-    prefactor = dt
 
     # Calculate array of frequencies, shift
     w = np.fft.fftfreq(Nw, dt)
@@ -24,6 +22,8 @@ def spectrum_wwind(array, time, window='None'):  # time should be in seconds
         bwin = blackman(Nw)  # pretty good
     if window == 'hanning':
         bwin = hanning(Nw)  # pretty good
+        S1 = np.sum(bwin)
+        S2 = np.sum(bwin**2)
     if window == 'hamming':
         bwin = hamming(Nw)  # not as good
     if window == 'bartlett':
@@ -32,7 +32,7 @@ def spectrum_wwind(array, time, window='None'):  # time should be in seconds
         bwin = 1.0
 
     # Calculate FFT
-    aw = prefactor*np.fft.fft(array*bwin)
+    aw = np.fft.fft(array*bwin)
     aw0 = np.fft.fftshift(aw)
 
     # Calcuate Phase
@@ -52,11 +52,11 @@ def spectrum_wwind(array, time, window='None'):  # time should be in seconds
     phase2 = phase0[Nwi:]
 
     comp = aw
-    pwr = (np.abs(aw2))**2
-    pwr2 = (np.abs(aw))**2
+    pwr = 2/S1**2*(np.abs(aw2))**2
+    pwr_den = 2*dt*(np.abs(aw2))**2/S2
     mag = np.sqrt(pwr)
     cos_phase = np.cos(phase2)
     freq = w2
     freq2 = w
 
-    return freq, freq2, comp, pwr, mag, phase2, cos_phase, dt
+    return freq, freq2, comp, pwr, pwr_den, mag, phase2, cos_phase, dt
