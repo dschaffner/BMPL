@@ -36,10 +36,6 @@ time_s = data['time']['time_s'][:]
 
 poslist = ['pos9','pos11','pos13','pos15','pos17','pos19','pos21']
 
-
-
-
-
 #select time range for FFT (in us)
 start_time = 50
 end_time = 150
@@ -58,7 +54,7 @@ for pos in np.arange(len(poslist)):
         x=data[poslist[pos]]['b']['r'][:]
         y=data[poslist[pos]]['b']['z'][:]
         Bmag[pos,:] = np.sqrt(x**2+y**2)
-"""
+
 #determine FFT size and generate an output array
 fsize=int((data['pos9']['b']['z'][0,start_time_index:end_time_index].shape[0])/2)+1
 avebspec_frombdot = np.zeros([7,2,fsize])
@@ -160,7 +156,6 @@ print('$\lambda_{0}=$',popt[1])
 #data2_sub = data['pos13']['b']['z'][0,start_time_index:end_time_index]-data2_mean
 #corr2_man = np.sum(data1_sub*data2_sub)
 
-"""
 """
 #loop over shots to read in data and compute FFT
 
