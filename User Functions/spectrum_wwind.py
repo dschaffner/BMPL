@@ -1,7 +1,7 @@
 # compute FFT of given array
 
 import numpy as np
-from scipy.signal import blackman, bartlett, hanning, hamming
+from scipy import blackman, bartlett, hanning, hamming
 
 
 def spectrum_wwind(array, time, window='None'):  # time should be in seconds
