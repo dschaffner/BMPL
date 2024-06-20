@@ -100,7 +100,7 @@ testpicoshot=pd.read_csv(datadirectory+'\pico1\\20240605-0001 ('+str(6)+').csv',
 time=h5f.create_group("time")
 tstart = testpicoshot['Time'][0]*1e-6#pico reads out in us, convert to seconds
 time.create_dataset('tstart',data=tstart)
-tinterval=np.abs(testpicoshot['Time'][0]*1e-6)
+tinterval=np.abs((testpicoshot['Time'][1]-testpicoshot['Time'][0])*1e-6)
 time.create_dataset('tinterval',data=tinterval)
 numsamples=int(np.shape(testpicoshot['Time'])[0])
 time.create_dataset('numsamples',data=numsamples)
@@ -175,8 +175,8 @@ for current in np.arange(10):
         Discharge[radpos,current,savenumber,:]=Discharge_raw[radpos,current,savenumber,:]*1000.0*2.0
         HV[radpos,current,savenumber,:]=HV_raw[radpos,current,savenumber,:]*1000.0
         
-        Bdotr[radpos,current,0,savenumber,:]=np.array(pico['Channel C'],dtype=float)*term50
-        Bdott[radpos,current,0,savenumber,:]=np.array(pico['Channel D'],dtype=float)*term50
+        Bdotr[radpos,current,0,savenumber,:]=np.array(pico['Channel C'],dtype=float)*term50*1e-3#to convert to volts
+        Bdott[radpos,current,0,savenumber,:]=np.array(pico['Channel D'],dtype=float)*term50*1e-3#to convert to volts
         
         #filter Bdot
         Bdotr[radpos,current,0,savenumber,:]=butter_bandpass_filter(Bdotr[radpos,current,0,savenumber,:],lowcut,highcut,fs,order=9)
@@ -208,10 +208,10 @@ for current in np.arange(10):
         pico.replace("-∞",-bdotmaxrange,inplace=True)
         pico.replace("∞",bdotmaxrange,inplace=True)
         
-        Bdotz[radpos,current,0,savenumber,:]=np.array(pico['Channel A'],dtype=float)*term50
-        Bdotr[radpos,current,1,savenumber,:]=np.array(pico['Channel B'],dtype=float)*term50
-        Bdott[radpos,current,1,savenumber,:]=np.array(pico['Channel C'],dtype=float)*term50
-        Bdotz[radpos,current,1,savenumber,:]=np.array(pico['Channel D'],dtype=float)*term50
+        Bdotz[radpos,current,0,savenumber,:]=np.array(pico['Channel A'],dtype=float)*term50*1e-3#to convert to volts
+        Bdotr[radpos,current,1,savenumber,:]=np.array(pico['Channel B'],dtype=float)*term50*1e-3#to convert to volts
+        Bdott[radpos,current,1,savenumber,:]=np.array(pico['Channel C'],dtype=float)*term50*1e-3#to convert to volts
+        Bdotz[radpos,current,1,savenumber,:]=np.array(pico['Channel D'],dtype=float)*term50*1e-3#to convert to volts
         
         #filter Bdot
         Bdotz[radpos,current,0,savenumber,:]=butter_bandpass_filter(Bdotz[radpos,current,0,savenumber,:],lowcut,highcut,fs,order=9)
@@ -247,10 +247,10 @@ for current in np.arange(10):
         pico.replace("-∞",-bdotmaxrange,inplace=True)
         pico.replace("∞",bdotmaxrange,inplace=True)
         
-        Bdotr[radpos,current,2,savenumber,:]=np.array(pico['Channel A'],dtype=float)*term50
-        Bdott[radpos,current,2,savenumber,:]=np.array(pico['Channel B'],dtype=float)*term50
-        Bdotz[radpos,current,2,savenumber,:]=np.array(pico['Channel C'],dtype=float)*term50
-        Bdotr[radpos,current,3,savenumber,:]=np.array(pico['Channel D'],dtype=float)*term50
+        Bdotr[radpos,current,2,savenumber,:]=np.array(pico['Channel A'],dtype=float)*term50*1e-3#to convert to volts
+        Bdott[radpos,current,2,savenumber,:]=np.array(pico['Channel B'],dtype=float)*term50*1e-3#to convert to volts
+        Bdotz[radpos,current,2,savenumber,:]=np.array(pico['Channel C'],dtype=float)*term50*1e-3#to convert to volts
+        Bdotr[radpos,current,3,savenumber,:]=np.array(pico['Channel D'],dtype=float)*term50*1e-3#to convert to volts
         
         #filter Bdot
         Bdotr[radpos,current,2,savenumber,:]=butter_bandpass_filter(Bdotr[radpos,current,2,savenumber,:],lowcut,highcut,fs,order=9)
@@ -285,9 +285,9 @@ for current in np.arange(10):
         pico.replace("-∞",-bdotmaxrange,inplace=True)
         pico.replace("∞",bdotmaxrange,inplace=True)
         
-        Bdott[radpos,current,3,savenumber,:]=np.array(pico['Channel A'],dtype=float)*term50
-        Bdotz[radpos,current,3,savenumber,:]=np.array(pico['Channel B'],dtype=float)*term50
-        vf[radpos,current,savenumber,:]=np.array(pico['Channel C'],dtype=float)*200.0#into volts
+        Bdott[radpos,current,3,savenumber,:]=np.array(pico['Channel A'],dtype=float)*term50*1e-3#to convert to volts
+        Bdotz[radpos,current,3,savenumber,:]=np.array(pico['Channel B'],dtype=float)*term50*1e-3#to convert to volts
+        vf[radpos,current,savenumber,:]=np.array(pico['Channel C'],dtype=float)*200.0*1e-3#to convert to volts
         
         #filter Bdot
         Bdott[radpos,current,3,savenumber,:]=butter_bandpass_filter(Bdott[radpos,current,3,savenumber,:],lowcut,highcut,fs,order=9)

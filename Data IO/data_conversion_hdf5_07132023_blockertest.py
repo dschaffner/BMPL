@@ -102,7 +102,7 @@ testpicoshot=pd.read_csv(datadirectory+'\pico1\\20230713-0001 ('+str(6)+').csv',
 time=h5f.create_group("time")
 tstart = testpicoshot['Time'][0]*1e-6#pico reads out in us, convert to seconds
 time.create_dataset('tstart',data=tstart)
-tinterval=np.abs(testpicoshot['Time'][0]*1e-6)
+tinterval=np.abs((testpicoshot['Time'][1]-testpicoshot['Time'][0])*1e-6)
 time.create_dataset('tinterval',data=tinterval)
 numsamples=int(np.shape(testpicoshot['Time'])[0])
 time.create_dataset('numsamples',data=numsamples)
@@ -114,7 +114,7 @@ time.create_dataset('time_us',data=time_s*1e6)
 testpicoshot=pd.read_csv(datadirectory+'\pico3\\20230713-0001 ('+str(6)+').csv',header=[0],skiprows=(1,2))
 tstart_vf = testpicoshot['Time'][0]*1e-6#pico reads out in us, convert to seconds
 time.create_dataset('tstart_vf',data=tstart_vf)
-tinterval_vf=np.abs(testpicoshot['Time'][0]*1e-6)
+tinterval_vf=np.abs((testpicoshot['Time'][1]-testpicoshot['Time'][0])*1e-6)
 time.create_dataset('tinterval_vf',data=tinterval_vf)
 numsamples_vf=int(np.shape(testpicoshot['Time'])[0])
 time.create_dataset('numsamples_vf',data=numsamples_vf)
