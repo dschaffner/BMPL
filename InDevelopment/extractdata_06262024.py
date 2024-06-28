@@ -10,9 +10,10 @@ import indexfinderfuncs as iff
 directory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2024\\06262024\\'
 # ***** CHANGE Pathway!! *****************************************************
 
-datafilename= 'Dataset_06262024_2kV_1p5stuff_wire_nocurrent_20shots.h5'
-datafilename= 'Dataset_06262024_2kV_1p5stuff_wire_4kA_20shots.h5'
-datafilename= 'Dataset_06262024_1kV_1stuff_wire_nocurrent_20shots.h5'
+#pick a file from four possible (by commenting out the other files)
+#datafilename= 'Dataset_06262024_2kV_1p5stuff_wire_nocurrent_20shots.h5'
+#datafilename= 'Dataset_06262024_2kV_1p5stuff_wire_4kA_20shots.h5'
+#datafilename= 'Dataset_06262024_1kV_1stuff_wire_nocurrent_20shots.h5'
 datafilename= 'Dataset_06262024_1kV_1stuff_wire_4kA_20shots.h5'
 data=load_hdf5(directory+datafilename,verbose=True)
 
