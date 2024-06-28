@@ -10,7 +10,8 @@ import indexfinderfuncs as iff
 directory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2024\\06192024\\'
 # ***** CHANGE Pathway!! *****************************************************
 
-datafilename= 'Dataset_06192024.h5'
+#datafilename= 'Dataset_06192024.h5'
+datafilename= 'Dataset_06192024_2kV_1p5stuff_centerprobes.h5'
 data=load_hdf5(directory+datafilename,verbose=True)
 
 #magnetic probe time
@@ -47,7 +48,7 @@ port_sep = 0.0254#m
 
 #directions = ['r','t','z']
 arr1=data['mag_probe']['r']['b'][0,5,:]
-arr2=data['mag_probe']['t']['b'][4,12,:]
+arr2=data['mag_probe']['t']['b'][0,5,:]
 plt.figure(1)
 plt.plot(timeB_us,arr1)
 plt.plot(timeB_us,arr2)

@@ -6,23 +6,18 @@ Created on Tue Jun 18 09:34:02 2019
 
 @author: dschaffner
 """
-import scipy.io as spio
-import matplotlib.pylab as plt
 import numpy as np
 import scipy.integrate as sp
-import os
 import pandas as pd
 
-datadirectory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2024\\06192024\\'
-maxshot=1
-startshot=77
-skipshots=[13,14,29,30]
-numskipped=len(skipshots)
+datadirectory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2024\\06202024\\'
+
+#numskipped=len(skipshots)
 #numshots=maxshot-(startshot-1)-numskipped
 
-runfilename = 'Dataset_06192024_2kV_1p5stuff_centerprobes'
-
-
+#runfilename = 'Dataset_06202024_2kV_0p5stuff_centerprobes' #shots 1 to 31, skip 24, 30shots total
+#runfilename = 'Dataset_06202024_2kV_1p5stuff_gas2ms_to_1.95ms_centerprobes' #shots 40 to 72, skip 49,50,64, 30shots total
+runfilename = 'Dataset_06202024_2kV_1p5stuff_probes_at_rad3in' #shots 86 to 119, skip 92,93,95,96 30shots total, first two shots no Efield
 """
 high voltage - Pico1A
 current - Pico1B
@@ -42,7 +37,7 @@ RTZ2 is closest to source, RTZ1 is furthest
 06282023 data was probe at 1in, 2in, and 3in away from center radially
 """
 
-from scipy.signal import butter, sosfiltfilt, sosfreqz
+from scipy.signal import butter, sosfiltfilt
 
 def butter_bandpass(lowcut, highcut, fs, order=5):
         nyq = 0.5 * fs
@@ -81,9 +76,9 @@ tloop_area = probe_dia*hole_sep
 zloop_area = probe_dia*hole_sep
 
 run_info=h5f.create_group("run_info")
-run_info.create_dataset('Discharge_Voltage (kV)',data=1e3)
-run_info.create_dataset('Collection Dates',data='06192024')
-run_info.create_dataset('Stuffing Delay (ms)',data=-1.5)
+run_info.create_dataset('Discharge_Voltage (kV)',data=2e3)
+run_info.create_dataset('Collection Dates',data='06202024')
+run_info.create_dataset('Stuffing Delay (ms)',data=-0.5)
 run_info.create_dataset('Gas Open (ms)',data=-2.0)
 run_info.create_dataset('Gas Close (ms)',data=0.001)
 startintg_index=0#3000
@@ -94,7 +89,7 @@ bdotmaxrange=5.0
 #time_ms,time_s,timeB_s,timeB_ms,Bdot1,Bdot2,Bdot3,Bdot4,B1,B2,B3,B4,B1filt,B2filt,B3filt,B4filt
 #testpicoshot=spio.loadmat(datadirectory+'Pico1\\20220317-0001 ('+str(1)+').mat')
 #testpicoshot=np.loadtxt(datadirectory+'\pico1\\20230627-0001 ('+str(10)+').txt',skiprows = 2, unpack = True)
-testpicoshot=pd.read_csv(datadirectory+'\pico1\\20240619-0001 ('+str(6)+').csv',header=[0],skiprows=[1])
+testpicoshot=pd.read_csv(datadirectory+'\pico1\\20240620-0001 ('+str(6)+').csv',header=[0],skiprows=[1])
 
 
 time=h5f.create_group("time")
@@ -145,17 +140,16 @@ efield = np.zeros([numshots,numsamples])
 term50=2.0
 
 
-startshot=6
-maxshot=40
-
+startshot=86
+maxshot=120
+skipshots=[92,93,95,96]
 ### Extract PICO 1 ###
 savenumber=0
 for shot in np.arange(startshot,maxshot):
     if shot in skipshots:
         continue
     #Load Picoscope file
-    #pico=np.loadtxt(datadirectory+'\pico1\\20230627-0001 ('+str(shot)+').txt',skiprows = 2, unpack = True)
-    pico=pd.read_csv(datadirectory+'\Pico1\\20240619-0001 ('+str(shot)+').csv',header=[0],skiprows=[1])
+    pico=pd.read_csv(datadirectory+'\Pico1\\20240620-0001 ('+str(shot)+').csv',header=[0],skiprows=[1])
     print('Pico 1: loading shot number ', shot)
     
     #replace infinities (from clipping) with max range values
@@ -187,8 +181,7 @@ for shot in np.arange(startshot,maxshot):
     if shot in skipshots:
         continue
     #Load Picoscope file
-    #pico=np.loadtxt(datadirectory+'\pico1\\20230627-0001 ('+str(shot)+').txt',skiprows = 2, unpack = True)
-    pico=pd.read_csv(datadirectory+'\Pico2\\20240619-0001 ('+str(shot)+').csv',header=[0],skiprows=[1])
+    pico=pd.read_csv(datadirectory+'\Pico2\\20240620-0001 ('+str(shot)+').csv',header=[0],skiprows=[1])
     print('Pico 2: loading shot number ', shot)
     
     #replace infinities (from clipping) with max range values
@@ -221,8 +214,7 @@ for shot in np.arange(startshot,maxshot):
     if shot in skipshots:
         continue
     #Load Picoscope file
-    #pico=np.loadtxt(datadirectory+'\pico1\\20230627-0001 ('+str(shot)+').txt',skiprows = 2, unpack = True)
-    pico=pd.read_csv(datadirectory+'\Pico3\\20240619-0001 ('+str(shot)+').csv',header=[0],skiprows=[1])
+    pico=pd.read_csv(datadirectory+'\Pico3\\20240620-0001 ('+str(shot)+').csv',header=[0],skiprows=[1])
     print('Pico 3: loading shot number ', shot)
     
     #replace infinities (from clipping) with max range values
@@ -255,8 +247,7 @@ for shot in np.arange(startshot,maxshot):
     if shot in skipshots:
         continue
     #Load Picoscope file
-    #pico=np.loadtxt(datadirectory+'\pico1\\20230627-0001 ('+str(shot)+').txt',skiprows = 2, unpack = True)
-    pico=pd.read_csv(datadirectory+'\Pico4\\20240619-0001 ('+str(shot)+').csv',header=[0],skiprows=[1])
+    pico=pd.read_csv(datadirectory+'\Pico4\\20240620-0001 ('+str(shot)+').csv',header=[0],skiprows=[1])
     print('Pico 4: loading shot number ', shot)
     
     #replace infinities (from clipping) with max range values
@@ -289,8 +280,7 @@ for shot in np.arange(startshot,maxshot):
     if shot in skipshots:
         continue
     #Load Picoscope file
-    #pico=np.loadtxt(datadirectory+'\pico1\\20230627-0001 ('+str(shot)+').txt',skiprows = 2, unpack = True)
-    pico=pd.read_csv(datadirectory+'\Pico5\\20240619-0001 ('+str(shot)+').csv',header=[0],skiprows=[1])
+    pico=pd.read_csv(datadirectory+'\Pico5\\20240620-0001 ('+str(shot)+').csv',header=[0],skiprows=[1])
     print('Pico 5: loading shot number ', shot)
     
     #replace infinities (from clipping) with max range values
@@ -323,8 +313,7 @@ for shot in np.arange(startshot,maxshot):
     if shot in skipshots:
         continue
     #Load Picoscope file
-    #pico=np.loadtxt(datadirectory+'\pico1\\20230627-0001 ('+str(shot)+').txt',skiprows = 2, unpack = True)
-    pico=pd.read_csv(datadirectory+'\Pico6\\20240619-0001 ('+str(shot)+').csv',header=[0],skiprows=[1])
+    pico=pd.read_csv(datadirectory+'\Pico6\\20240620-0001 ('+str(shot)+').csv',header=[0],skiprows=[1])
     print('Pico 6: loading shot number ', shot)
     
     #replace infinities (from clipping) with max range values
