@@ -15,12 +15,12 @@ datadirectory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2024\\06262024\\
 #numskipped=len(skipshots)
 #numshots=maxshot-(startshot-1)-numskipped
 
-#runfilename = 'Dataset_06262024_2kV_1p5stuff_wire_nocurrent_30shots' #shots 10 to 39 no skips
+runfilename = 'Dataset_06262024_2kV_1p5stuff_wire_nocurrent_30shots_test' #shots 10 to 39 no skips
 #runfilename = 'Dataset_06262024_2kV_1p5stuff_wire_nocurrent_41shots' #shots 1 to 41 no skips
 #runfilename = 'Dataset_06262024_2kV_1p5stuff_wire_nocurrent_20shots' #shots 20 to 39 no skips
 #runfilename = 'Dataset_06262024_2kV_1p5stuff_wire_4kA_20shots' #shots 42 to 63 skip 51, 52
 #runfilename = 'Dataset_06262024_1kV_1stuff_wire_nocurrent_20shots' #shots 70 to 90 skip 88
-runfilename = 'Dataset_06262024_1kV_1stuff_wire_4kA_20shots' #shots 91 to 114 skip 92,95,98,99
+#runfilename = 'Dataset_06262024_1kV_1stuff_wire_4kA_20shots' #shots 91 to 114 skip 92,95,98,99
 """
 5 probes:
     Triplet Bdot at Port 1, 3, 5
@@ -76,7 +76,7 @@ run_info.create_dataset('Gas Open (ms)',data=-2.0)
 run_info.create_dataset('Gas Close (ms)',data=0.001)
 startintg_index=0#3000
 meancutoff = 1000
-bdotmaxrange=2.0
+bdotmaxrange=5.0
 
 
 #time_ms,time_s,timeB_s,timeB_ms,Bdot1,Bdot2,Bdot3,Bdot4,B1,B2,B3,B4,B1filt,B2filt,B3filt,B4filt
@@ -115,7 +115,7 @@ time.create_dataset('time_us',data=time_s*1e6)
 
 
 ###BEGIN Scan READIN#####
-numshots=20#30
+numshots=30#30
 numprobes_trip = 3
 numprobes_squid = 2
 numpoints_squid = 6
@@ -136,9 +136,9 @@ efield = np.zeros([numshots,numsamples])
 term50=2.0
 
 
-startshot=91
-maxshot=115
-skipshots=[92,95,98,99]
+startshot=10
+maxshot=40
+skipshots=[]
 ### Extract PICO 1 ###
 savenumber=0
 for shot in np.arange(startshot,maxshot):
