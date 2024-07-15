@@ -55,4 +55,9 @@ plt.plot(timeB_s,arr)
 #loading in the wire current data
 plt.figure(2)
 wire=data['wirecurrent']['wirecurrent'][0,40,:]
-plt.plot(time_s_wc,wire)
+#plt.plot(time_s_wc,wire)
+b=np.arange(2500)
+Bfield_wire = (4*np.pi*1e-7*b/(2*np.pi*0.0254))*10000
+Bfield_wire2 = (4*np.pi*1e-7*b/(2*np.pi*0.007))*10000
+plt.plot(b,Bfield_wire)
+plt.plot(b,Bfield_wire2)
