@@ -1,5 +1,6 @@
 import numpy as np
 import tools
+import dataset as data03
 import bmx as BMX
 
 
@@ -46,8 +47,8 @@ def shot_bmag_stdnorm(refPos, window, filt, max_probe_number=8):
     for posIndex, pos in enumerate(posArray):
         for shot in range(0, 25):
 
-            Br_1, Bt_1, Bz_1, time = tools.load_data(refPos, shot)
-            Br_2, Bt_2, Bz_2, time = tools.load_data(pos, shot)
+            Br_1, Bt_1, Bz_1, time = data03.load_data(refPos, shot)
+            Br_2, Bt_2, Bz_2, time = data03.load_data(pos, shot)
 
             start_Dex = BMX.finding_Index_Time(time*1e-6, window[0])
             end_Dex = BMX.finding_Index_Time(time*1e-6, window[1])

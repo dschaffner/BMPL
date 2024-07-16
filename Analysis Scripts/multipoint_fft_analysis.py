@@ -11,7 +11,7 @@ import matplotlib.pylab as plt
 from load_hdf5 import load_hdf5
 import numpy as np
 import spectrum_wwind as spec
-import indexfinderfuncs as iff
+ 
 
 #######################################################################
 # Directory style depends on Mac vs PC. For PC, use a double backslash.

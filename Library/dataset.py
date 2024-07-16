@@ -1,4 +1,4 @@
-# List of input and output functions for 03102020 dataset
+# List of input and output functions for 03102020 dataset, this script will need to be update for each dataset.
 import numpy as np
 import h5py
 
@@ -41,3 +41,14 @@ def load_bdot_data(pos, shot):
     Bzdot = posD['z'][()]
     f.close()
     return Brdot[shot], Btdot[shot], Bzdot[shot], time
+
+
+def get_bank_voltage_current():
+    """ Outputs the discharge voltage, current and time."""
+    filename = '/Volumes/cacs_resear/Data/2020/03102020/HDF5/bankData.h5'
+    f = h5py.File(filename, 'r')
+    current = f['/data/curr'][()]
+    voltage = f['/data/volt'][()]
+    time = f['/time/time'][()]
+    f.close()
+    return current, voltage, time
