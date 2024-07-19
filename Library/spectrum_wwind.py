@@ -1,15 +1,15 @@
 # compute FFT of given array
 
 import numpy as np
-from scipy.signal import blackman, bartlett, hanning, hamming, kaiser
+from scipy.signal import blackman, bartlett, hann, hamming, kaiser
 
 
-def spectrum_wwind(array, time, window='hanning'):  # time should be in seconds
+def spectrum_wwind(array, time, window="hanning"):  # time should be in seconds
     # Size of array
     Nw = array.shape[0]
 
     # Calculate time step (assumed to be in seconds)
-    dt = time[1]-time[0]
+    dt = time[1] - time[0]
 
     # prefactor
     # print 'dt = ',dt
@@ -21,21 +21,21 @@ def spectrum_wwind(array, time, window='hanning'):  # time should be in seconds
 
     # make window
     # blackman window
-    if window == 'blackman':
+    if window == "blackman":
         bwin = blackman(Nw)  # pretty good
-    if window == 'hanning':
-        bwin = hanning(Nw)  # pretty good
-    if window == 'hamming':
+    if window == "hanning":
+        bwin = hann(Nw)  # pretty good
+    if window == "hamming":
         bwin = hamming(Nw)  # not as good
-    if window == 'bartlett':
+    if window == "bartlett":
         bwin = bartlett(Nw)  # pretty good
-    if window == 'kaiser':
+    if window == "kaiser":
         bwin = kaiser(Nw, 6)
-    if window == 'None':
+    if window == "None":
         bwin = 1.0
 
     # Calculate FFT
-    aw = prefactor*np.fft.fft(array*bwin)
+    aw = prefactor * np.fft.fft(array * bwin)
     aw0 = np.fft.fftshift(aw)
 
     # Calcuate Phase
@@ -49,14 +49,14 @@ def spectrum_wwind(array, time, window='hanning'):  # time should be in seconds
         phase0 = np.append(phase0, -phase0[0])
 
     # Cut FFTs in half
-    Nwi = Nw//2
+    Nwi = Nw // 2
     w2 = w0[Nwi:]
     aw2 = aw0[Nwi:]
     phase2 = phase0[Nwi:]
 
     comp = aw
-    pwr = (np.abs(aw2))**2
-    pwr2 = (np.abs(aw))**2
+    pwr = (np.abs(aw2)) ** 2
+    pwr2 = (np.abs(aw)) ** 2
     mag = np.sqrt(pwr)
     cos_phase = np.cos(phase2)
     freq = w2
