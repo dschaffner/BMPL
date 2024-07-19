@@ -84,6 +84,17 @@ for probe in np.arange(probes):
             spec_squid_frombdot_wodisk[probe,loop,shot,:]=pwr/(f*f)
             avebspec_squid_frombdot_wodisk[probe,loop,:]=avebspec_squid_frombdot_wodisk[probe,loop,:]+pwr/(f*f)
 
+
+plt.loglog(f,avebspec_frombdot_wdisk[0,1,:]+avebspec_frombdot_wdisk[0,2,:],label='With Disk')
+plt.loglog(f,avebspec_frombdot_wodisk[0,1,:]+avebspec_frombdot_wodisk[0,2,:],label='Without Disk')
+plt.loglog(f,1e-11*f**(-5/3),label='Kolm. Scaling')
+plt.legend()
+plt.xlabel('Frequency', fontsize=12)
+plt.xticks(fontsize=12)
+plt.ylabel('Power [arb]', fontsize=12)
+plt.yticks(fontsize=12)
+plt.ylim(1e-29,1e-18)
+plt.xlim(1e4,1e7)
 """
 #Data from 2022
 
