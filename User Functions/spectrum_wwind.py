@@ -1,7 +1,7 @@
 # compute FFT of given array
 
 import numpy as np
-from scipy.signal import blackman, bartlett, hanning, hamming
+from scipy.signal import blackman, bartlett, hann, hamming
 
 
 def spectrum_wwind(array, time, window='None'):  # time should be in seconds
@@ -22,8 +22,8 @@ def spectrum_wwind(array, time, window='None'):  # time should be in seconds
     # blackman window
     if window == 'blackman':
         bwin = blackman(Nw)  # pretty good
-    if window == 'hanning':
-        bwin = hanning(Nw)  # pretty good
+    if window == 'hann':
+        bwin = hann(Nw)  # pretty good
     if window == 'hamming':
         bwin = hamming(Nw)  # not as good
     if window == 'bartlett':
