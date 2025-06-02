@@ -10,17 +10,18 @@ import numpy as np
 import scipy.integrate as sp
 import pandas as pd
 
-datadirectory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2025\\03272025\\'
+datadirectory='C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2025\\04032025\\'
 
-runfilename = 'TetrahedronBdot_2kV_p5msstuff_2mst1usgas_30shots' #shots 5 to 35 skip 33
+runfilename = 'DensCorr_2p5kV_p5msstuff_2mst1usgas_25shots' #shots 10 to 17
 
-startshot=5
-maxshot=35+1
-skipshots=[33]
+startshot=10
+maxshot=40+1
+skipshots=[18,19,21,22,23]
 """
 4 probes:
     3 Triplet Bdot at on tetrahedral plane Probes 1, 2, 3 from near side over to back 
-    1 Triplet Bdot at Port 15
+    1 Triplet Bdot at Port 1
+    1 Langmuir Probe at Port opposite Port 1
     
     Bdots at 2V/div on scope
 """
@@ -66,7 +67,7 @@ tloop_area = probe_dia*hole_sep
 zloop_area = probe_dia*hole_sep
 
 run_info=h5f.create_group("run_info")
-run_info.create_dataset('Discharge_Voltage (kV)',data=2e3)
+run_info.create_dataset('Discharge_Voltage (kV)',data=2.5e3)
 run_info.create_dataset('Collection Dates',data='03272025')
 run_info.create_dataset('Stuffing Delay (ms)',data=-0.5)
 run_info.create_dataset('Gas Open (ms)',data=-2.0)
@@ -80,7 +81,7 @@ bdotmaxrange=2#mV
 #time_ms,time_s,timeB_s,timeB_ms,Bdot1,Bdot2,Bdot3,Bdot4,B1,B2,B3,B4,B1filt,B2filt,B3filt,B4filt
 #testpicoshot=spio.loadmat(datadirectory+'Pico1\\20220317-0001 ('+str(1)+').mat')
 #testpicoshot=np.loadtxt(datadirectory+'\pico1\\20230627-0001 ('+str(10)+').txt',skiprows = 2, unpack = True)
-testpicoshot=pd.read_csv(datadirectory+'\pico1\\20250327-0001 ('+str(6)+').csv',header=[0],skiprows=[1])
+testpicoshot=pd.read_csv(datadirectory+'\Pico1\\20250403-0001 ('+str(10)+').csv',header=[0],skiprows=[1])
 
 
 time=h5f.create_group("time")
@@ -109,6 +110,7 @@ Bdotz = np.zeros([numprobes_trip,numshots,numsamples])
 Br = np.zeros([numprobes_trip,numshots,numsamples-1])
 Bt = np.zeros([numprobes_trip,numshots,numsamples-1])
 Bz = np.zeros([numprobes_trip,numshots,numsamples-1])
+isat = np.zeros([numshots,numsamples])
 term50=2.0
 
 #
@@ -119,7 +121,7 @@ for shot in np.arange(startshot,maxshot):
     if shot in skipshots:
         continue
     #Load Picoscope file
-    pico=pd.read_csv(datadirectory+'\Pico1\\20250327-0001 ('+str(shot)+').csv',header=[0],skiprows=[1])
+    pico=pd.read_csv(datadirectory+'\Pico1\\20250403-0001 ('+str(shot)+').csv',header=[0],skiprows=[1])
     print('Pico 1: loading shot number ', shot)
     
     #replace infinities (from clipping) with max range values
@@ -151,7 +153,7 @@ for shot in np.arange(startshot,maxshot):
     if shot in skipshots:
         continue
     #Load Picoscope file
-    pico=pd.read_csv(datadirectory+'\Pico2\\20250327-0001 ('+str(shot)+').csv',header=[0],skiprows=[1])
+    pico=pd.read_csv(datadirectory+'\Pico2\\20250403-0001 ('+str(shot)+').csv',header=[0],skiprows=[1])
     print('Pico 2: loading shot number ', shot)
     
     #replace infinities (from clipping) with max range values
@@ -184,7 +186,7 @@ for shot in np.arange(startshot,maxshot):
     if shot in skipshots:
         continue
     #Load Picoscope file
-    pico=pd.read_csv(datadirectory+'\Pico3\\20240327-0001 ('+str(shot)+').csv',header=[0],skiprows=[1])
+    pico=pd.read_csv(datadirectory+'\Pico3\\20250403-0001 ('+str(shot)+').csv',header=[0],skiprows=[1])
     print('Pico 3: loading shot number ', shot)
     
     #replace infinities (from clipping) with max range values
@@ -217,7 +219,7 @@ for shot in np.arange(startshot,maxshot):
     if shot in skipshots:
         continue
     #Load Picoscope file
-    pico=pd.read_csv(datadirectory+'\Pico4\\20250327-0001 ('+str(shot)+').csv',header=[0],skiprows=[1])
+    pico=pd.read_csv(datadirectory+'\Pico4\\20250403-0001 ('+str(shot)+').csv',header=[0],skiprows=[1])
     print('Pico 4: loading shot number ', shot)
     
     #replace infinities (from clipping) with max range values
@@ -234,6 +236,8 @@ for shot in np.arange(startshot,maxshot):
     #Compute Magnetic Field for Bdots
     Bt[3,savenumber,:]= sp.cumtrapz(Bdott[3,savenumber,:]/tloop_area,time_s)*1e4#Gauss
     Bz[3,savenumber,:]= sp.cumtrapz(Bdotz[3,savenumber,:]/tloop_area,time_s)*1e4#Gauss
+    
+    isat[savenumber,:]=np.array(pico['Channel C'],dtype=float)*term50*20.0/100.0#Amps
     #End of loop
     savenumber+=1
 ##END PICO4 READIN #####
@@ -254,6 +258,10 @@ t.create_dataset("b",data=Bt)
 z=mag.create_group("z")
 z.create_dataset("bdot",data=Bdotz)
 z.create_dataset("b",data=Bz)
+
+#create langmuir probe group
+isat_probe=h5f.create_group("isat probe")
+isat_probe.create_dataset("isat",data=isat)
                        
 #create discharage group
 dis=h5f.create_group("discharge")
