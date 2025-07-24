@@ -4,12 +4,13 @@ from load_hdf5 import load_hdf5
 
 data_directory_location = 'C:\\Users\\dschaffner\\Dropbox\\Data\\BMPL\\BMX\\2025\\06192025\\'
 
-# place the following file in the directory indicated above
-datafilename = 'TwoDens_twoBdot_2kV_p6msstuff_2mst1usgas_halfplateblocker_20shots.h5'
-
+# place the following file in the directory indicated aboved
+#datafilename = 'TwoDens_twoBdot_2kV_p6msstuff_2mst1usgas_halfplateblocker_20shots_1cm_behind.h5'
+datafilename = 'TwoDens_twoBdot_2kV_p6msstuff_2mst1usgas_halfplateblocker_20shots_2cm_behind.h5'
 
 # load hdf5 file
 data1 = load_hdf5(data_directory_location+datafilename, verbose=True)
+
 
 isatdata=data1['isat probe']['isat']
 
@@ -46,14 +47,14 @@ ave_isat2 = ave_isat2/20.0
 
 
 
-
-#plt.plot(time_us,ave_isat1,label='Near Probe')
-#plt.plot(time_us,ave_isat2,label='Far Probe')
-#plt.xlabel('Time [us]')
-#plt.ylabel('Isat [A]')
-#plt.legend()
-#plt.title('Average Isat over 20 shots')
-#plt.show()
+plt.figure(1)
+plt.plot(time_us,ave_isat1,label='Near Probe')
+plt.plot(time_us,ave_isat2,label='Far Probe')
+plt.xlabel('Time [us]')
+plt.ylabel('Isat [A]')
+plt.legend()
+plt.title('Average Isat over 20 shots')
+plt.show()
 
 
 
@@ -65,17 +66,30 @@ ave_b = np.zeros([25003])
 #Bdot Probe 1 The first shot
 br = data1['mag_probe']['r']['b'][0,0,:]
 bt = data1['mag_probe']['t']['b'][0,0,:]
+bz = data1['mag_probe']['z']['b'][0,0,:]
+#define Bmod (vector sum of all three component vectors)
+Bmodnear = np.sqrt(br**2 + bt**2 + bz**2)
+
+br = data1['mag_probe']['r']['b'][1,0,:]
+bt = data1['mag_probe']['t']['b'][1,0,:]
 bz = data1['mag_probe']['z']['b'][1,0,:]
 #define Bmod (vector sum of all three component vectors)
-Bmod = np.sqrt(br**2 + bt**2 + bz**2)
+Bmodfar = np.sqrt(br**2 + bt**2 + bz**2)
 
-print(timeB_us.shape)
-print(bz.shape)
+#print(timeB_us.shape)
+#print(bz.shape)
 #plt.plot(br)
 #plt.plot(bt)
 #plt.plot(bz)
-#plt.plot(Bmod)
-plt.plot(timeB_us,bz)
+
+plt.figure(2)
+plt.plot(timeB_us,Bmodnear,label='Near Probe')
+plt.plot(timeB_us,Bmodfar,label='Far Probe')
+plt.xlabel('Time [us]')
+plt.ylabel('B[G]')
+plt.legend()
+plt.title('Magnetic Field for first shot')
+plt.show()
 
 
 
