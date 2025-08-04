@@ -26,7 +26,7 @@ timeB_us = data1['time']['time_us'][1:]
 
 ####Aveage over shots
 
-###create storage array
+###create storage array=
 ave_isat1 = np.zeros([25004])
 ave_isat2 = np.zeros([25004])
 
